@@ -1,8 +1,9 @@
 package com.mohammadreza.mirali.energyconsumption;
 
+import entity.MonthEnum;
+
 import javax.inject.Named;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
 /**
  * Created by mmirali on 07/10/2018.
@@ -17,6 +18,6 @@ public class FractionService {
     @Path("/test")
     public void transactions()
     {
-        System.out.println("Thisi iiii");
+        System.out.println("Thisi iiii   "+ MonthEnum.valueOf("AN"));
     }
 }
