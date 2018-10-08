@@ -1,8 +1,10 @@
 package entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 /**
  * Created by mmirali on 07/10/2018.
@@ -10,24 +12,16 @@ import javax.persistence.Id;
 @Entity
 public class Profile {
     @Id
-    @GeneratedValue
-    private Long id;
-    private String name;
+    private String identifire;
 
-    public Long getId() {
-        return id;
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    List<ProfileFraction> profileFractionList;
+    public String getIdentifire() {
+        return identifire;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setIdentifire(String identifire) {
+        this.identifire = identifire;
     }
 
     @Override
@@ -37,12 +31,11 @@ public class Profile {
 
         Profile profile = (Profile) o;
 
-        if (!id.equals(profile.id)) return false;
-        return name.equals(profile.name);
+        return identifire.equals(profile.identifire);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return identifire.hashCode();
     }
 }
