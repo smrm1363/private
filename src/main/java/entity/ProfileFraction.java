@@ -13,7 +13,7 @@ public class ProfileFraction {
     @GeneratedValue
     private Long id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     private Profile profile;
     @NotNull

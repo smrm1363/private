@@ -1,15 +1,12 @@
-package com.mohammadreza.mirali.energyconsumption;
+package entity;
 
+import com.mohammadreza.mirali.energyconsumption.ProfileRepository;
 import entity.MonthEnum;
 import entity.Profile;
 import entity.ProfileFraction;
-import entity.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 
 /**
