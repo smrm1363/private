@@ -46,6 +46,14 @@ public class MeterEntity {
         this.profileEntity = profileEntity;
     }
 
+    public List<MeterReadingEntity> getMeterReadingEntityList() {
+        return meterReadingEntityList;
+    }
+
+    public void setMeterReadingEntityList(List<MeterReadingEntity> meterReadingEntityList) {
+        this.meterReadingEntityList = meterReadingEntityList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,5 +1,7 @@
 package com.mohammadreza.mirali.energyconsumption;
 
+import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingDto;
+import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingService;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionDto;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +17,33 @@ import java.util.List;
 @RestController
 
 public class FractionRestController {
-    @Autowired
-    ProfileFractionService profileFractionService;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public List uploadFile(@RequestPart(value = "file") MultipartFile multiPartFile) throws IOException {
+    private final ProfileFractionService profileFractionService;
+    private final MeterReadingService meterReadingService;
+
+    @Autowired
+    public FractionRestController(ProfileFractionService profileFractionService, MeterReadingService meterReadingService) {
+        this.profileFractionService = profileFractionService;
+        this.meterReadingService = meterReadingService;
+    }
+
+    @RequestMapping(value = "/uploadProfileFraction", method = RequestMethod.POST)
+    public List uploadProfileFraction(@RequestPart(value = "file") MultipartFile multiPartFile) throws IOException {
         System.out.println("......oooiilllll.....");
 
         profileFractionService.uploadfile(multiPartFile, ProfileFractionDto.class);
         return null;
     }
+
+    @RequestMapping(value = "/uploadMeterReading", method = RequestMethod.POST)
+    public List uploadMeterReading(@RequestPart(value = "file") MultipartFile multiPartFile) throws IOException {
+        System.out.println("......oooiilllll.....");
+
+        meterReadingService.uploadfile(multiPartFile, MeterReadingDto.class);
+        return null;
+    }
+
+
 
     @RequestMapping("/test")
     public void test()  {

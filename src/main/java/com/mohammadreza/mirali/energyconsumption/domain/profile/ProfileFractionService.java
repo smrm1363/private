@@ -67,19 +67,7 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
 
     }
 
-//    @Override
-//    public void uploadfile(MultipartFile multipartFile) throws IOException {
-//        File file = convertMultiPartToFile(multipartFile);
-//
-//
-//        try (Reader reader = new FileReader(file);) {
-////            @SuppressWarnings("unchecked")
-//            CsvToBean<ProfileFractionDto> csvToBean = new CsvToBeanBuilder<ProfileFractionDto>(reader).withType(ProfileFractionDto.class)
-//                    .withIgnoreLeadingWhiteSpace(true).build();
-//            List dtoList = csvToBean.parse();
-//
-//
-//        }
+
 
 
 }
