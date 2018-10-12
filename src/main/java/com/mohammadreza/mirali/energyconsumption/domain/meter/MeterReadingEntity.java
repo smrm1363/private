@@ -1,25 +1,28 @@
-package entity;
+package com.mohammadreza.mirali.energyconsumption.domain.meter;
+
+import com.mohammadreza.mirali.energyconsumption.domain.MonthEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by mmirali on 07/10/2018.
- */
 @Entity
-public class ProfileFraction {
-
+public class MeterReadingEntity {
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    private Profile profile;
+    MeterEntity meterEntity;
+
     @NotNull
+    @Enumerated(EnumType.STRING)
     private MonthEnum month;
+
     @NotNull
-    private Double fraction;
+    @DecimalMin("0.0")
+    private Double readedMeter;
 
     public Long getId() {
         return id;
@@ -29,12 +32,12 @@ public class ProfileFraction {
         this.id = id;
     }
 
-    public Profile getProfile() {
-        return profile;
+    public MeterEntity getMeterEntity() {
+        return meterEntity;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setMeterEntity(MeterEntity meterEntity) {
+        this.meterEntity = meterEntity;
     }
 
     public MonthEnum getMonth() {
@@ -45,12 +48,12 @@ public class ProfileFraction {
         this.month = month;
     }
 
-    public Double getFraction() {
-        return fraction;
+    public Double getReadedMeter() {
+        return readedMeter;
     }
 
-    public void setFraction(Double fraction) {
-        this.fraction = fraction;
+    public void setReadedMeter(Double readedMeter) {
+        this.readedMeter = readedMeter;
     }
 
     @Override
@@ -58,12 +61,12 @@ public class ProfileFraction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProfileFraction that = (ProfileFraction) o;
+        MeterReadingEntity that = (MeterReadingEntity) o;
 
         if (!id.equals(that.id)) return false;
-        if (!profile.equals(that.profile)) return false;
+        if (!meterEntity.equals(that.meterEntity)) return false;
         if (month != that.month) return false;
-        return fraction.equals(that.fraction);
+        return readedMeter.equals(that.readedMeter);
     }
 
     @Override
