@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service("MeterReadingService")
 public class MeterReadingService implements ConvertFileToEntityInt {
@@ -74,5 +72,15 @@ public class MeterReadingService implements ConvertFileToEntityInt {
             meterEntity.getMeterReadingEntityList().add(meterReadingEntity);
             meterRepository.save(meterEntity);
         });
+    }
+
+    @Override
+    public Map<String, String> getColumnMapping() {
+        Map<String, String> columnMapping = new HashMap<String, String>();
+        columnMapping.put("MeterID", "meterID");
+        columnMapping.put("Profile", "profile");
+        columnMapping.put("Month", "month");
+        columnMapping.put("Meter reading", "meterReading");
+        return columnMapping;
     }
 }

@@ -12,9 +12,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service("ProfileFractionService")
@@ -67,7 +65,15 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
 
     }
 
+    @Override
+    public Map<String, String> getColumnMapping() {
+        Map<String, String> columnMapping = new HashMap<String, String>();
+        columnMapping.put("Month", "month");
+        columnMapping.put("Profile", "profile");
+        columnMapping.put("Fraction", "fraction");
 
+        return columnMapping;
+    }
 
 
 }
