@@ -1,4 +1,4 @@
-package com.mohammadreza.mirali.energyconsumption.domain;
+package com.mohammadreza.mirali.energyconsumption.domain.common;
 
 /**
  * Created by mmirali on 07/10/2018.

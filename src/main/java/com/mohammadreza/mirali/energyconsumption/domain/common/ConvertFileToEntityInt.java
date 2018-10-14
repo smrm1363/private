@@ -1,6 +1,5 @@
-package com.mohammadreza.mirali.energyconsumption.domain;
+package com.mohammadreza.mirali.energyconsumption.domain.common;
 
-import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionDto;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface ConvertFileToEntityInt {
-    public void convertToEntity(List dtoList) throws IOException;
+    public List<String> convertToEntity(List dtoList) throws IOException;
     public Map<String, String> getColumnMapping();
 
 

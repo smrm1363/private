@@ -1,6 +1,5 @@
 MeterID,Profile,Month,Meter reading
-0001,A,JAN,10
-0004,B,JAN,8
-0004,B,FEB,10
-0001,A,FEB,12
-0001,A,MAR,18
+1,A,JAN,10
+4,B,JAN,8
+4,A,FEB,20
+2,C,JUN,5

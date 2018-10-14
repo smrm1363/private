@@ -1,29 +1,25 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
-import com.mohammadreza.mirali.energyconsumption.domain.ConvertFileToEntityInt;
-import com.mohammadreza.mirali.energyconsumption.domain.MonthEnum;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
+import com.mohammadreza.mirali.energyconsumption.domain.common.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.*;
 
 
 @Service("ProfileFractionService")
-public class ProfileFractionService implements ConvertFileToEntityInt {
+public class ProfileFractionService implements ConvertFileToEntityInt, ValidatorInt {
+    private final String validationsProperyKey = "profile.fraction.validation";
     private final ProfileRepository profileRepository;
     private final ProfileFractionRepository profileFractionRepository;
+    private final ValidationsFactory validationsFactory;
 
     @Autowired
-    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository) {
+    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository, ValidationsFactory validationsFactory) {
         this.profileRepository = profileRepository;
         this.profileFractionRepository = profileFractionRepository;
+        this.validationsFactory = validationsFactory;
     }
 
     public void insertProfile(ProfileEntity profileEntity)
@@ -32,23 +28,23 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
     }
 
     @Override
-    public void convertToEntity(List dtoList) throws IOException {
+    public List<String> convertToEntity(List dtoList) throws IOException {
         System.out.println("Here ...");
         List<ProfileFractionDto> profileFractionDtoList = dtoList;
+        List<String> allExceptionMessages = new ArrayList<>();
+        Map<String,ProfileEntity> profileEntityMap = new HashMap<>();
         profileFractionDtoList.forEach(profileFractionDto ->
         {
-            ProfileEntity profileEntity;
-            Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(profileFractionDto.getProfile());
-            if(profileEntityOptional.isPresent())
-            {
-                profileEntity = profileEntityOptional.get();
-            }
-            else
-            {
-                profileEntity = new ProfileEntity();
-                profileEntity.setId(profileFractionDto.getProfile());
+            ProfileEntity profileEntity = profileEntityMap.get(profileFractionDto.getProfile());
 
-
+            if(profileEntity == null) {
+                Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(profileFractionDto.getProfile());
+                if (profileEntityOptional.isPresent()) {
+                    profileEntity = profileEntityOptional.get();
+                } else {
+                    profileEntity = new ProfileEntity();
+                    profileEntity.setId(profileFractionDto.getProfile());
+                }
             }
             ProfileFractionEntity profileFractionEntity = new ProfileFractionEntity();
             profileFractionEntity.setFraction(profileFractionDto.getFraction());
@@ -60,9 +56,16 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
             }
 
             profileEntity.getProfileFractionEntityList().add(profileFractionEntity);
+            profileEntityMap.put(profileEntity.getId(),profileEntity);
+            List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
+            if(exeptionMessages.size()>0)
+            {
+                allExceptionMessages.addAll(exeptionMessages);
+                return;
+            }
             profileRepository.save(profileEntity);
         });
-
+    return allExceptionMessages;
     }
 
     @Override
@@ -74,6 +77,7 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
 
         return columnMapping;
     }
+
 
 
 }

@@ -1,6 +1,5 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
-import com.mohammadreza.mirali.energyconsumption.domain.MonthEnum;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
 import javax.persistence.*;

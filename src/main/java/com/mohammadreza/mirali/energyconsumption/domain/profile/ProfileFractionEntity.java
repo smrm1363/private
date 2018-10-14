@@ -1,6 +1,6 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
-import com.mohammadreza.mirali.energyconsumption.domain.MonthEnum;
+import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
