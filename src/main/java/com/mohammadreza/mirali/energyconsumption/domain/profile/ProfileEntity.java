@@ -49,6 +49,17 @@ public class ProfileEntity {
         this.meterEntityList = meterEntityList;
     }
 
+
+    public Boolean validateFractions()
+    {
+       Double total = profileFractionEntityList.stream().mapToDouble(value -> value.getFraction()).sum();
+       if(total.equals(1.1))
+           return true;
+       else
+           return false;
+
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,11 +1,13 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
+import com.mohammadreza.mirali.energyconsumption.domain.MonthEnum;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class MeterEntity {
@@ -53,6 +55,33 @@ public class MeterEntity {
     public void setMeterReadingEntityList(List<MeterReadingEntity> meterReadingEntityList) {
         this.meterReadingEntityList = meterReadingEntityList;
     }
+
+
+    public Boolean meterReadinValuesValidation()
+    {
+        meterReadingEntityList = meterReadingEntityList.stream().sorted((o1, o2) -> o1.getMonth().compareTo(o2.getMonth()) ).collect(Collectors.toList());
+        for (int x=0;x<meterReadingEntityList.size();x++)
+        {
+            if(x>0)
+            {
+                if(meterReadingEntityList.get(x).getReadedMeter() < meterReadingEntityList.get(x-1).getReadedMeter())
+                    return false;
+
+            }
+        }
+        return true;
+
+    }
+
+    public Boolean hasValidFraction()
+    {
+        if(profileEntity.getProfileFractionEntityList()!= null) {
+            if (profileEntity.getProfileFractionEntityList().size() == 12)
+                return true;
+        }
+        return false;
+    }
+
 
     @Override
     public boolean equals(Object o) {
