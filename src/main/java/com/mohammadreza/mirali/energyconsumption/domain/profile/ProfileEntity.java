@@ -2,10 +2,7 @@ package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -16,7 +13,7 @@ public class ProfileEntity {
     @Id
     private String id;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     List<ProfileFractionEntity> profileFractionEntityList;
 
 
@@ -49,16 +46,6 @@ public class ProfileEntity {
         this.meterEntityList = meterEntityList;
     }
 
-
-    public Boolean validateFractions()
-    {
-       Double total = profileFractionEntityList.stream().mapToDouble(value -> value.getFraction()).sum();
-       if(total.equals(1.1))
-           return true;
-       else
-           return false;
-
-    }
 
     @Override
     public boolean equals(Object o) {

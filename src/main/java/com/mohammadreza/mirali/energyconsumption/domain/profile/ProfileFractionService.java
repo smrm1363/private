@@ -31,7 +31,7 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
     public List<String> convertToEntity(List dtoList) throws IOException {
         System.out.println("Here ...");
         List<ProfileFractionDto> profileFractionDtoList = dtoList;
-        List<String> allExceptionMessages = new ArrayList<>();
+//        List<String> allExceptionMessages = new ArrayList<>();
         Map<String,ProfileEntity> profileEntityMap = new HashMap<>();
         profileFractionDtoList.forEach(profileFractionDto ->
         {
@@ -57,15 +57,43 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
 
             profileEntity.getProfileFractionEntityList().add(profileFractionEntity);
             profileEntityMap.put(profileEntity.getId(),profileEntity);
+
+//
+//            List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
+//            if(exeptionMessages.size()>0)
+//            {
+//                allExceptionMessages.addAll(exeptionMessages);
+//                return;
+//            }
+//            profileRepository.save(profileEntity);
+        });
+    return saveProfileList(new ArrayList<>(profileEntityMap.values()));
+    }
+
+
+    public List<String> saveProfileList(List<ProfileEntity> profileEntityList)
+    {
+
+        List<ProfileEntity> selectedProfileEntityList = new ArrayList<>();
+        List<String> allExceptionMessages = new ArrayList<>();
+        profileEntityList.forEach(profileEntity -> {
             List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
             if(exeptionMessages.size()>0)
             {
                 allExceptionMessages.addAll(exeptionMessages);
                 return;
             }
-            profileRepository.save(profileEntity);
+            else
+            {
+                selectedProfileEntityList.add(profileEntity);
+            }
+
         });
-    return allExceptionMessages;
+
+            profileRepository.saveAll(selectedProfileEntityList);
+            profileFractionRepository.flush();
+            profileRepository.flush();
+            return allExceptionMessages;
     }
 
     @Override
