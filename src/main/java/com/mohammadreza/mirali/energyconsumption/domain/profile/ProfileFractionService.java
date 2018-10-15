@@ -14,24 +14,27 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
     private final ProfileRepository profileRepository;
     private final ProfileFractionRepository profileFractionRepository;
     private final ValidationsFactory validationsFactory;
+    private final RepositoryCompletion repositoryCompletion;
 
     @Autowired
-    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository, ValidationsFactory validationsFactory) {
+    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository, ValidationsFactory validationsFactory, RepositoryCompletion repositoryCompletion) {
         this.profileRepository = profileRepository;
         this.profileFractionRepository = profileFractionRepository;
         this.validationsFactory = validationsFactory;
+        this.repositoryCompletion = repositoryCompletion;
     }
 
-    public void insertProfile(ProfileEntity profileEntity)
+    public List<String> insertProfile(ProfileEntity profileEntity)
     {
-        profileRepository.save(profileEntity);
+        List<ProfileEntity> profileEntityList = new ArrayList<>();
+        profileEntityList.add(profileEntity);
+        return saveProfileList(profileEntityList);
     }
 
     @Override
     public List<String> convertToEntity(List dtoList) throws IOException {
         System.out.println("Here ...");
         List<ProfileFractionDto> profileFractionDtoList = dtoList;
-//        List<String> allExceptionMessages = new ArrayList<>();
         Map<String,ProfileEntity> profileEntityMap = new HashMap<>();
         profileFractionDtoList.forEach(profileFractionDto ->
         {
@@ -52,8 +55,7 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
             {
                 profileEntity.setProfileFractionEntityList(new ArrayList<ProfileFractionEntity>());
             }
-//            Optional<ProfileFractionEntity> profileFractionEntityOptional =
-//                    profileFractionRepository.findById(new ProfileFractionId(profileEntity,MonthEnum.valueOf(profileFractionDto.getMonth())));
+
             Boolean updated = false;
             for(ProfileFractionEntity profileFractionEntity1:profileEntity.getProfileFractionEntityList())
             {
@@ -73,34 +75,10 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
                 profileFractionEntity.setFraction(profileFractionDto.getFraction());
                 profileEntity.getProfileFractionEntityList().add(profileFractionEntity);
             }
-//            if(profileFractionEntityOptional.isPresent())
-//            {
-//                profileFractionEntity = profileFractionEntityOptional.get();
-//            }
-//            else
-//            {
-//                profileFractionEntity = new ProfileFractionEntity();
-//                profileFractionEntity.setMonth(MonthEnum.valueOf(profileFractionDto.getMonth()));
-//                profileFractionEntity.setProfileEntity(profileEntity);
-//            }
-//            profileFractionEntity.setFraction(profileFractionDto.getFraction());
-
-//            if(profileEntity.getProfileFractionEntityList()==null)
-//            {
-//                profileEntity.setProfileFractionEntityList(new ArrayList<ProfileFractionEntity>());
-//            }
 
 
             profileEntityMap.put(profileEntity.getId(),profileEntity);
 
-//
-//            List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
-//            if(exeptionMessages.size()>0)
-//            {
-//                allExceptionMessages.addAll(exeptionMessages);
-//                return;
-//            }
-//            profileRepository.save(profileEntity);
         });
     return saveProfileList(new ArrayList<>(profileEntityMap.values()));
     }
@@ -109,26 +87,27 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
     public List<String> saveProfileList(List<ProfileEntity> profileEntityList)
     {
 
-        List<ProfileEntity> selectedProfileEntityList = new ArrayList<>();
-        List<String> allExceptionMessages = new ArrayList<>();
-        profileEntityList.forEach(profileEntity -> {
-            List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
-            if(exeptionMessages.size()>0)
-            {
-                allExceptionMessages.addAll(exeptionMessages);
-                return;
-            }
-            else
-            {
-                selectedProfileEntityList.add(profileEntity);
-            }
+       return repositoryCompletion.saveEntityListWithValidation(profileEntityList,profileRepository,validationsProperyKey);
+//        List<ProfileEntity> selectedProfileEntityList = new ArrayList<>();
+//        List<String> allExceptionMessages = new ArrayList<>();
+//        profileEntityList.forEach(profileEntity -> {
+//            List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
+//            if(exeptionMessages.size()>0)
+//            {
+//                allExceptionMessages.addAll(exeptionMessages);
+//                return;
+//            }
+//            else
+//            {
+//                selectedProfileEntityList.add(profileEntity);
+//            }
+//
+//        });
+//
+//            profileRepository.saveAll(selectedProfileEntityList);
+//            return allExceptionMessages;
 
-        });
 
-            profileRepository.saveAll(selectedProfileEntityList);
-            profileFractionRepository.flush();
-            profileRepository.flush();
-            return allExceptionMessages;
     }
 
     @Override

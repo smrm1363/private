@@ -7,15 +7,18 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@IdClass(MeterReadingId.class)
 public class MeterReadingEntity {
-    @Id
-    @GeneratedValue
-    private Long id;
+//    @Id
+//    @GeneratedValue
+//    private Long id;
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
     MeterEntity meterEntity;
 
+    @Id
     @NotNull
     @Enumerated(EnumType.STRING)
     private MonthEnum month;
@@ -24,13 +27,13 @@ public class MeterReadingEntity {
     @DecimalMin("0.0")
     private Double readedMeter;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public MeterEntity getMeterEntity() {
         return meterEntity;
@@ -63,7 +66,6 @@ public class MeterReadingEntity {
 
         MeterReadingEntity that = (MeterReadingEntity) o;
 
-        if (!id.equals(that.id)) return false;
         if (!meterEntity.equals(that.meterEntity)) return false;
         if (month != that.month) return false;
         return readedMeter.equals(that.readedMeter);
@@ -71,6 +73,8 @@ public class MeterReadingEntity {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        int result = meterEntity.hashCode();
+        result = 31 * result + month.hashCode();
+        return result;
     }
 }

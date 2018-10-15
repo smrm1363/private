@@ -2,6 +2,7 @@ package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
 import com.mohammadreza.mirali.energyconsumption.domain.common.*;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
+import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,76 +18,96 @@ public class MeterReadingService implements ConvertFileToEntityInt, ValidatorInt
     private final MeterReadingRepository meterReadingRepository;
     private final ProfileRepository profileRepository;
     private final ValidationsFactory validationsFactory;
+    private final RepositoryCompletion repositoryCompletion;
+
 
     @Autowired
-    public MeterReadingService(MeterRepository meterRepository, MeterReadingRepository meterReadingRepository, ProfileRepository profileRepository, ValidationsFactory validationsFactory) {
+    public MeterReadingService(MeterRepository meterRepository, MeterReadingRepository meterReadingRepository, ProfileRepository profileRepository, ValidationsFactory validationsFactory, RepositoryCompletion repositoryCompletion) {
         this.meterRepository = meterRepository;
         this.meterReadingRepository = meterReadingRepository;
         this.profileRepository = profileRepository;
         this.validationsFactory = validationsFactory;
+        this.repositoryCompletion = repositoryCompletion;
     }
 
+    public List<String> insertMeter(MeterEntity meterEntity)
+    {
+        List<MeterEntity> meterEntityList = new ArrayList<>();
+        meterEntityList.add(meterEntity);
+        return saveMeterList(meterEntityList);
+    }
 
     @Override
     public List<String> convertToEntity(List dtoList) throws IOException {
 
         List<MeterReadingDto> meterReadingDtoList = dtoList;
         List<String> allExceptionMessages = new ArrayList<>();
+        Map<String,MeterEntity> meterEntityMap = new HashMap<>();
         meterReadingDtoList.stream().sorted((o1, o2) -> MonthEnum.valueOf(o1.month).compareTo(MonthEnum.valueOf(o2.month)))
                 .forEach(meterReadingDto ->
         {
-            MeterEntity meterEntity;
-            Optional<MeterEntity> meterEntityOptional = meterRepository.findById(meterReadingDto.getMeterID());
-            if(meterEntityOptional.isPresent())
-            {
-                meterEntity = meterEntityOptional.get();
-            }
-            else
-            {
-                meterEntity = new MeterEntity();
-                meterEntity.setId(meterReadingDto.getMeterID());
 
+            MeterEntity meterEntity = meterEntityMap.get(meterReadingDto.getMeterID());
 
+            if(meterEntity == null) {
+                Optional<MeterEntity> meterEntityOptional = meterRepository.findById(meterReadingDto.getMeterID());
+                if (meterEntityOptional.isPresent()) {
+                    meterEntity = meterEntityOptional.get();
+                } else {
+                    meterEntity = new MeterEntity();
+                    meterEntity.setId(meterReadingDto.getMeterID());
+                }
             }
             meterEntity.setValue(meterReadingDto.getMeterReading());
-            ProfileEntity profileEntity;
+            ProfileEntity profileEntity = null;
             Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(meterReadingDto.getProfile());
             if(profileEntityOptional.isPresent())
                 profileEntity = profileEntityOptional.get();
-            else
-            {
-                // TODO: 10/12/2018
-                System.out.println("Profile is not present");
-                return;
-            }
+//            else
+//            {
+//                // TODO: 10/12/2018
+//                System.out.println("Profile is not present");
+//                return;
+//            }
             meterEntity.setProfileEntity(profileEntity);
 
-
-            MeterReadingEntity meterReadingEntity = new MeterReadingEntity();
-            meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
-            meterReadingEntity.setMonth(MonthEnum.valueOf(meterReadingDto.getMonth()));
-            meterReadingEntity.setMeterEntity(meterEntity);
             if(meterEntity.getMeterReadingEntityList()==null)
             {
                 meterEntity.setMeterReadingEntityList(new ArrayList<MeterReadingEntity>());
             }
-
-            meterEntity.getMeterReadingEntityList().add(meterReadingEntity);
-
-            /**
-             * Validation
-             */
-
-
-            List<String> exeptionMessages = doValidations(meterEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
-            if(exeptionMessages.size()>0)
+            Boolean updated = false;
+            for(MeterReadingEntity meterReadingEntity:meterEntity.getMeterReadingEntityList())
             {
-                allExceptionMessages.addAll(exeptionMessages);
-                return;
+                if(meterReadingEntity.getMeterEntity().getId().equals(meterReadingDto.getMeterID()))
+                    if(meterReadingEntity.getMonth() == MonthEnum.valueOf(meterReadingDto.getMonth()))
+                    {
+                        meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
+                        updated = true;
+                        break;
+                    }
             }
-            meterRepository.save(meterEntity);
+
+            if(!updated) {
+                MeterReadingEntity meterReadingEntity = new MeterReadingEntity();
+                meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
+                meterReadingEntity.setMonth(MonthEnum.valueOf(meterReadingDto.getMonth()));
+                meterReadingEntity.setMeterEntity(meterEntity);
+                meterEntity.getMeterReadingEntityList().add(meterReadingEntity);
+            }
+
+
+            meterEntityMap.put(meterEntity.getId(),meterEntity);
+
+
         });
-        return allExceptionMessages;
+        return saveMeterList(new ArrayList<>(meterEntityMap.values()));
+    }
+
+
+
+    public List<String> saveMeterList(List<MeterEntity> meterEntityList) {
+
+        return repositoryCompletion.saveEntityListWithValidation(meterEntityList, profileRepository, validationsProperyKey);
     }
 
     @Override
