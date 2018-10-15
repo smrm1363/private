@@ -46,16 +46,51 @@ public class ProfileFractionService implements ConvertFileToEntityInt, Validator
                     profileEntity.setId(profileFractionDto.getProfile());
                 }
             }
-            ProfileFractionEntity profileFractionEntity = new ProfileFractionEntity();
-            profileFractionEntity.setFraction(profileFractionDto.getFraction());
-            profileFractionEntity.setMonth(MonthEnum.valueOf(profileFractionDto.getMonth()));
-            profileFractionEntity.setProfileEntity(profileEntity);
+
+
             if(profileEntity.getProfileFractionEntityList()==null)
             {
                 profileEntity.setProfileFractionEntityList(new ArrayList<ProfileFractionEntity>());
             }
+//            Optional<ProfileFractionEntity> profileFractionEntityOptional =
+//                    profileFractionRepository.findById(new ProfileFractionId(profileEntity,MonthEnum.valueOf(profileFractionDto.getMonth())));
+            Boolean updated = false;
+            for(ProfileFractionEntity profileFractionEntity1:profileEntity.getProfileFractionEntityList())
+            {
+                if(profileFractionEntity1.getProfileEntity().getId().equals(profileFractionDto.getProfile()))
+                    if(profileFractionEntity1.getMonth() == MonthEnum.valueOf(profileFractionDto.getMonth()))
+                    {
+                        profileFractionEntity1.setFraction(profileFractionDto.getFraction());
+                        updated = true;
+                        break;
+                    }
+            }
+            if(!updated)
+            {
+                ProfileFractionEntity profileFractionEntity = new ProfileFractionEntity();
+                profileFractionEntity.setMonth(MonthEnum.valueOf(profileFractionDto.getMonth()));
+                profileFractionEntity.setProfileEntity(profileEntity);
+                profileFractionEntity.setFraction(profileFractionDto.getFraction());
+                profileEntity.getProfileFractionEntityList().add(profileFractionEntity);
+            }
+//            if(profileFractionEntityOptional.isPresent())
+//            {
+//                profileFractionEntity = profileFractionEntityOptional.get();
+//            }
+//            else
+//            {
+//                profileFractionEntity = new ProfileFractionEntity();
+//                profileFractionEntity.setMonth(MonthEnum.valueOf(profileFractionDto.getMonth()));
+//                profileFractionEntity.setProfileEntity(profileEntity);
+//            }
+//            profileFractionEntity.setFraction(profileFractionDto.getFraction());
 
-            profileEntity.getProfileFractionEntityList().add(profileFractionEntity);
+//            if(profileEntity.getProfileFractionEntityList()==null)
+//            {
+//                profileEntity.setProfileFractionEntityList(new ArrayList<ProfileFractionEntity>());
+//            }
+
+
             profileEntityMap.put(profileEntity.getId(),profileEntity);
 
 //
