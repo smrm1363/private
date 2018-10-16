@@ -5,6 +5,7 @@ import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 @Entity
 @IdClass(MeterReadingId.class)
@@ -27,13 +28,7 @@ public class MeterReadingEntity {
     @DecimalMin("0.0")
     private Double readedMeter;
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+
 
     public MeterEntity getMeterEntity() {
         return meterEntity;
@@ -57,6 +52,19 @@ public class MeterReadingEntity {
 
     public void setReadedMeter(Double readedMeter) {
         this.readedMeter = readedMeter;
+    }
+
+    public Double getConsumption()
+    {
+        if(month.equals(0))
+            return readedMeter;
+        else
+        {
+             Optional<MeterReadingEntity> meterReadingEntity = meterEntity.getMeterReadingEntityList().stream().filter(meterReadingEntity1 ->
+             meterReadingEntity1.getMonth().equals(month.prev())).findFirst();
+             return readedMeter - meterReadingEntity.get().getReadedMeter();
+
+        }
     }
 
     @Override
