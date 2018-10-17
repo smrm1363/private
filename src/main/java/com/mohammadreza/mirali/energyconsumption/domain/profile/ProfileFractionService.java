@@ -9,7 +9,7 @@ import java.util.*;
 
 
 @Service("ProfileFractionService")
-public class ProfileFractionService implements ConvertFileToEntityInt, ValidatorInt {
+public class ProfileFractionService implements ConvertFileToEntityInt {
     private final String validationsProperyKey = "profile.fraction.validation";
     private final ProfileRepository profileRepository;
     private final ProfileFractionRepository profileFractionRepository;

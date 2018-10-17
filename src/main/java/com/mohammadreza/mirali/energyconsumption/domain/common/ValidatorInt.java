@@ -5,20 +5,33 @@ import java.util.List;
 
 public interface ValidatorInt {
 
-    default <T> List<String> doValidations(T t,List<ValidationRule> validationRuleList)
+    default <T> String doValidations(T t,List<ValidationRule> validationRuleList)
     {
-        List<String> messages = new ArrayList<>();
+        String message = null;
 //        List<ValidationRule> validationRuleList = validationsFactory.getValidationRulesByPropertyName(validationsProperyKey);
-        validationRuleList.forEach(validationRule ->
+//        validationRuleList.forEach(validationRule ->
+//        {
+//            try {
+//                validationRule.validate(t);
+//            } catch (ValidationException e) {
+//                messages.add(e.getMessage());
+//                e.printStackTrace();
+//            }
+//        });
+
+        for(ValidationRule validationRule:validationRuleList)
         {
             try {
                 validationRule.validate(t);
             } catch (ValidationException e) {
-                messages.add(e.getMessage());
+
                 e.printStackTrace();
+                return e.getMessage();
+
             }
-        });
-        return messages;
+        }
+
+        return null;
 
     }
 }

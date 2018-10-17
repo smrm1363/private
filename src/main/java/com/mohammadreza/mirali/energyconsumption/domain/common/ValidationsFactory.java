@@ -20,13 +20,13 @@ public class ValidationsFactory {
 
     public List<ValidationRule> getValidationRulesByPropertyName(String propertyKey)
     {
-        String[] validationArray = propertyKey.split(",");
+        String[] validationArray = env.getProperty(propertyKey).split(",");
         List<ValidationRule> validationRuleList = new ArrayList<>();
         Arrays.stream(validationArray).forEach(s -> {
 
 
             try {
-                validationRuleList.add((ValidationRule) Class.forName(env.getProperty(s)).newInstance());
+                validationRuleList.add((ValidationRule) Class.forName(s).newInstance());
             } catch (InstantiationException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {

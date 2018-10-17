@@ -56,7 +56,7 @@ public class MeterReadingEntity {
 
     public Double getConsumption()
     {
-        if(month.equals(0))
+        if(month.equals(MonthEnum.JAN))
             return readedMeter;
         else
         {

@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service("MeterReadingService")
-public class MeterReadingService implements ConvertFileToEntityInt, ValidatorInt {
+public class MeterReadingService implements ConvertFileToEntityInt {
 
     private final String validationsProperyKey = "meter.reading.validations";
     private final MeterRepository meterRepository;
@@ -61,8 +61,10 @@ public class MeterReadingService implements ConvertFileToEntityInt, ValidatorInt
             meterEntity.setValue(meterReadingDto.getMeterReading());
             ProfileEntity profileEntity = null;
             Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(meterReadingDto.getProfile());
-            if(profileEntityOptional.isPresent())
+            if(profileEntityOptional.isPresent()) {
                 profileEntity = profileEntityOptional.get();
+                profileEntity.getProfileFractionEntityList();
+            }
 //            else
 //            {
 //                // TODO: 10/12/2018

@@ -21,10 +21,10 @@ public class RepositoryCompletion implements ValidatorInt{
         List<T> selectedEntityList = new ArrayList<>();
         List<String> allExceptionMessages = new ArrayList<>();
         entityList.forEach(entity -> {
-            List<String> exeptionMessages = doValidations(entity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
-            if(exeptionMessages.size()>0)
+            String exeptionMessage = doValidations(entity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
+            if(exeptionMessage != null)
             {
-                allExceptionMessages.addAll(exeptionMessages);
+                allExceptionMessages.add(exeptionMessage);
                 return;
             }
             else
