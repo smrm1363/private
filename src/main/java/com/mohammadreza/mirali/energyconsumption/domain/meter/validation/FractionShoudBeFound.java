@@ -32,6 +32,7 @@ public class FractionShoudBeFound implements ValidationRule {
                         if(meterReadingEntity.getMonth().equals(profileFractionEntity.getMonth()))
                         {
                             found = true;
+                            meterReadingEntity.setMatchedProfileFractionEntity(profileFractionEntity);
                             continue;
                         }
                     }

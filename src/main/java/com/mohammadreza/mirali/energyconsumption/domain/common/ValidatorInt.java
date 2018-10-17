@@ -1,12 +1,12 @@
 package com.mohammadreza.mirali.energyconsumption.domain.common;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public interface ValidatorInt {
 
-    default <T> String doValidations(T t,List<ValidationRule> validationRuleList)
-    {
+    default <T> String doValidations(T t,List<ValidationRule> validationRuleList)  {
         String message = null;
 //        List<ValidationRule> validationRuleList = validationsFactory.getValidationRulesByPropertyName(validationsProperyKey);
 //        validationRuleList.forEach(validationRule ->

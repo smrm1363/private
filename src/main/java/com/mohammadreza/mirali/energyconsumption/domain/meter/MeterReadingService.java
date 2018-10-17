@@ -105,7 +105,19 @@ public class MeterReadingService implements ConvertFileToEntityInt {
         return saveMeterList(new ArrayList<>(meterEntityMap.values()));
     }
 
+    public void deleteMeter(String meterID)
+    {
+         meterRepository.deleteById(meterID);
+    }
+    public MeterEntity findMeterById(String meterId)
+    {
+       return meterRepository.findById(meterId).get();
+    }
+    public Double loadConsumption(String meterId,String month)
+    {
+        return meterReadingRepository.findByMeterEntityIdAndMonth(meterId,MonthEnum.valueOf(month)).get(0).getConsumtion();
 
+    }
 
     public List<String> saveMeterList(List<MeterEntity> meterEntityList) {
 

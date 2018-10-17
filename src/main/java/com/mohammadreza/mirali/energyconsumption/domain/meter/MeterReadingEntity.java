@@ -1,6 +1,7 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
 import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
+import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -28,7 +29,10 @@ public class MeterReadingEntity {
     @DecimalMin("0.0")
     private Double readedMeter;
 
+    private Double consumtion;
 
+    @Transient
+    private ProfileFractionEntity matchedProfileFractionEntity;
 
     public MeterEntity getMeterEntity() {
         return meterEntity;
@@ -54,7 +58,7 @@ public class MeterReadingEntity {
         this.readedMeter = readedMeter;
     }
 
-    public Double getConsumption()
+    public Double calculateConsumption()
     {
         if(month.equals(MonthEnum.JAN))
             return readedMeter;
@@ -65,6 +69,22 @@ public class MeterReadingEntity {
              return readedMeter - meterReadingEntity.get().getReadedMeter();
 
         }
+    }
+
+    public ProfileFractionEntity getMatchedProfileFractionEntity() {
+        return matchedProfileFractionEntity;
+    }
+
+    public void setMatchedProfileFractionEntity(ProfileFractionEntity matchedProfileFractionEntity) {
+        this.matchedProfileFractionEntity = matchedProfileFractionEntity;
+    }
+
+    public Double getConsumtion() {
+        return consumtion;
+    }
+
+    public void setConsumtion(Double consumtion) {
+        this.consumtion = consumtion;
     }
 
     @Override

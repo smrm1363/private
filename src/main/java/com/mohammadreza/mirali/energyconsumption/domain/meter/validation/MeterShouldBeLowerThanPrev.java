@@ -7,6 +7,7 @@ import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingEntity;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
