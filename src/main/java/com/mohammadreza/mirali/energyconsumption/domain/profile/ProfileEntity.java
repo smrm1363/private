@@ -1,5 +1,6 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ public class ProfileEntity {
     List<ProfileFractionEntity> profileFractionEntityList;
 
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REFRESH)
     List<MeterEntity> meterEntityList;
 
 
@@ -37,7 +38,7 @@ public class ProfileEntity {
     public void setProfileFractionEntityList(List<ProfileFractionEntity> profileFractionEntityList) {
         this.profileFractionEntityList = profileFractionEntityList;
     }
-
+    @JsonIgnore
     public List<MeterEntity> getMeterEntityList() {
         return meterEntityList;
     }

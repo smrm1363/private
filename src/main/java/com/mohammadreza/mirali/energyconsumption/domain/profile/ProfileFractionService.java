@@ -1,6 +1,8 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
 import com.mohammadreza.mirali.energyconsumption.domain.common.*;
+import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
+import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +17,26 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
     private final ProfileFractionRepository profileFractionRepository;
     private final ValidationsFactory validationsFactory;
     private final RepositoryCompletion repositoryCompletion;
+    private final MeterRepository meterRepository;
 
     @Autowired
-    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository, ValidationsFactory validationsFactory, RepositoryCompletion repositoryCompletion) {
+    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository, ValidationsFactory validationsFactory, RepositoryCompletion repositoryCompletion, MeterRepository meterRepository) {
         this.profileRepository = profileRepository;
         this.profileFractionRepository = profileFractionRepository;
         this.validationsFactory = validationsFactory;
         this.repositoryCompletion = repositoryCompletion;
+        this.meterRepository = meterRepository;
     }
 
-    public List<String> insertProfile(ProfileEntity profileEntity)
-    {
+    public void insertProfile(ProfileEntity profileEntity) throws ValidationException {
         List<ProfileEntity> profileEntityList = new ArrayList<>();
+        profileEntity.getProfileFractionEntityList().forEach(profileFractionEntity -> profileFractionEntity.setProfileEntity(profileEntity));
         profileEntityList.add(profileEntity);
-        return saveProfileList(profileEntityList);
+        saveProfileList(profileEntityList);
     }
 
     @Override
-    public List<String> convertToEntity(List dtoList) throws IOException {
+    public void convertToEntity(List dtoList) throws IOException, ValidationException {
         System.out.println("Here ...");
         List<ProfileFractionDto> profileFractionDtoList = dtoList;
         Map<String,ProfileEntity> profileEntityMap = new HashMap<>();
@@ -80,14 +84,37 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
             profileEntityMap.put(profileEntity.getId(),profileEntity);
 
         });
-    return saveProfileList(new ArrayList<>(profileEntityMap.values()));
+     saveProfileList(new ArrayList<>(profileEntityMap.values()));
     }
 
 
-    public List<String> saveProfileList(List<ProfileEntity> profileEntityList)
-    {
 
-       return repositoryCompletion.saveEntityListWithValidation(profileEntityList,profileRepository,validationsProperyKey);
+    public void deleteProfile(String profileID) throws ValidationException {
+
+        List<MeterEntity> meterEntityList= meterRepository.findByProfileEntityId(profileID);
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("This profile with ("+profileID+") is used in one or some Meters, first delete the meters. List of meeters : ");
+        meterEntityList.forEach(meterEntity -> {
+            stringBuffer.append(meterEntity.getId()+"; ");
+        });
+        if(meterEntityList.size()>0)
+        {
+            throw new ValidationException(stringBuffer.toString());
+        }
+        profileRepository.deleteById(profileID);
+
+    }
+    public ProfileEntity findProfileById(String profileId)
+    {
+        return profileRepository.findById(profileId).get();
+    }
+
+
+
+
+    public void saveProfileList(List<ProfileEntity> profileEntityList) throws ValidationException {
+
+        repositoryCompletion.saveEntityListWithValidation(profileEntityList,profileRepository,validationsProperyKey);
 //        List<ProfileEntity> selectedProfileEntityList = new ArrayList<>();
 //        List<String> allExceptionMessages = new ArrayList<>();
 //        profileEntityList.forEach(profileEntity -> {

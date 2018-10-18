@@ -1,5 +1,9 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
 import javax.persistence.*;
@@ -16,6 +20,7 @@ public class MeterEntity {
     @NotNull
     @DecimalMin("0.0")
     Double value;
+
 
     @ManyToOne(fetch= FetchType.LAZY)
     ProfileEntity profileEntity;
@@ -39,6 +44,8 @@ public class MeterEntity {
         this.value = value;
     }
 
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     public ProfileEntity getProfileEntity() {
         return profileEntity;
     }
@@ -46,6 +53,7 @@ public class MeterEntity {
     public void setProfileEntity(ProfileEntity profileEntity) {
         this.profileEntity = profileEntity;
     }
+
 
     public List<MeterReadingEntity> getMeterReadingEntityList() {
         return meterReadingEntityList;

@@ -15,8 +15,7 @@ public class RepositoryCompletion implements ValidatorInt{
         this.validationsFactory = validationsFactory;
     }
 
-    public <T,B extends JpaRepository> List<String> saveEntityListWithValidation(List<T> entityList, B repository,String validationsProperyKey)
-    {
+    public <T,B extends JpaRepository> void saveEntityListWithValidation(List<T> entityList, B repository,String validationsProperyKey) throws ValidationException {
 
         List<T> selectedEntityList = new ArrayList<>();
         List<String> allExceptionMessages = new ArrayList<>();
@@ -35,6 +34,11 @@ public class RepositoryCompletion implements ValidatorInt{
         });
 
         repository.saveAll(selectedEntityList);
-        return allExceptionMessages;
+        StringBuilder stringBuilder = new StringBuilder();
+        allExceptionMessages.forEach(message -> {
+            stringBuilder.append(message+" ; ");
+        });
+        if(allExceptionMessages.size()>0)
+            throw new ValidationException(stringBuilder.toString());
     }
 }

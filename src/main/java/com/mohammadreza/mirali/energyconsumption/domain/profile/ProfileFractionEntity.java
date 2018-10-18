@@ -1,5 +1,9 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 
 import javax.persistence.*;
@@ -14,16 +18,13 @@ import javax.validation.constraints.NotNull;
 @IdClass(ProfileFractionId.class)
 public class ProfileFractionEntity {
 
-//    @Id
-//    @GeneratedValue
-//    private Long id;
 
-//    @Id
-//    private ProfileFractionId profileFractionId;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private ProfileEntity profileEntity;
 
     @Id
@@ -36,13 +37,7 @@ public class ProfileFractionEntity {
     @DecimalMin("0.0")
     private Double fraction;
 
-//    public Long getId() {
-//        return id;
-//    }
 
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
 
     public ProfileEntity getProfileEntity() {
         return profileEntity;

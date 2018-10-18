@@ -30,15 +30,15 @@ public class MeterReadingService implements ConvertFileToEntityInt {
         this.repositoryCompletion = repositoryCompletion;
     }
 
-    public List<String> insertMeter(MeterEntity meterEntity)
-    {
+    public void insertMeter(MeterEntity meterEntity) throws ValidationException {
         List<MeterEntity> meterEntityList = new ArrayList<>();
+        meterEntity.getMeterReadingEntityList().forEach(meterReadingEntity -> meterReadingEntity.setMeterEntity(meterEntity));
         meterEntityList.add(meterEntity);
-        return saveMeterList(meterEntityList);
+        saveMeterList(meterEntityList);
     }
 
     @Override
-    public List<String> convertToEntity(List dtoList) throws IOException {
+    public void convertToEntity(List dtoList) throws IOException, ValidationException {
 
         List<MeterReadingDto> meterReadingDtoList = dtoList;
         List<String> allExceptionMessages = new ArrayList<>();
@@ -102,7 +102,7 @@ public class MeterReadingService implements ConvertFileToEntityInt {
 
 
         });
-        return saveMeterList(new ArrayList<>(meterEntityMap.values()));
+        saveMeterList(new ArrayList<>(meterEntityMap.values()));
     }
 
     public void deleteMeter(String meterID)
@@ -119,9 +119,9 @@ public class MeterReadingService implements ConvertFileToEntityInt {
 
     }
 
-    public List<String> saveMeterList(List<MeterEntity> meterEntityList) {
+    public void saveMeterList(List<MeterEntity> meterEntityList) throws ValidationException {
 
-        return repositoryCompletion.saveEntityListWithValidation(meterEntityList, profileRepository, validationsProperyKey);
+         repositoryCompletion.saveEntityListWithValidation(meterEntityList, profileRepository, validationsProperyKey);
     }
 
     @Override

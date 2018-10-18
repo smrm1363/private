@@ -1,8 +1,10 @@
 package com.mohammadreza.mirali.energyconsumption;
 
+import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationException;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingDto;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingService;
+import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionDto;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,58 +19,44 @@ import java.util.List;
 public class FractionRestController {
 
     private final ProfileFractionService profileFractionService;
-    private final MeterReadingService meterReadingService;
+
 
     @Autowired
-    public FractionRestController(ProfileFractionService profileFractionService, MeterReadingService meterReadingService) {
+    public FractionRestController(ProfileFractionService profileFractionService) {
         this.profileFractionService = profileFractionService;
-        this.meterReadingService = meterReadingService;
+
     }
 
     @RequestMapping(value = "/uploadProfileFraction", method = RequestMethod.POST)
-    public List uploadProfileFraction(@RequestPart(value = "file") MultipartFile multiPartFile) throws IOException {
+    public void uploadProfileFraction(@RequestPart(value = "file") MultipartFile multiPartFile) throws IOException, ValidationException {
         System.out.println("......oooiilllll.....");
 
-        profileFractionService.uploadfile(multiPartFile, ProfileFractionDto.class);
-        return null;
+        profileFractionService.uploadMultiPartFile(multiPartFile, ProfileFractionDto.class);
+
     }
 
-    @RequestMapping(value = "/uploadMeterReading", method = RequestMethod.POST)
-    public List uploadMeterReading(@RequestPart(value = "file") MultipartFile multiPartFile) throws IOException {
-        System.out.println("......oooiilllll.....");
-
-        meterReadingService.uploadfile(multiPartFile, MeterReadingDto.class);
-        return null;
+    @RequestMapping(value = "/insertProfile", method = RequestMethod.POST)
+    public void insertProfile(@RequestBody ProfileEntity profile) throws ValidationException {
+         profileFractionService.insertProfile(profile);
     }
 
-    @RequestMapping(value = "/loadConsumption", method = RequestMethod.GET)
-    public Double loadConsumption(String meterId,String month)
+    @RequestMapping(value = "/insertProfileFromLocalFile", method = RequestMethod.POST)
+    public void insertProfileFromLocalFile(@RequestPart(value = "localFilePath") String localFilePath) throws IOException, ValidationException {
+        profileFractionService.uploadOldFile(localFilePath, ProfileFractionDto.class);
+
+    }
+
+    @RequestMapping(value = "/deleteProfile", method = RequestMethod.DELETE)
+    public void deleteProfile(String profileId) throws ValidationException {
+        profileFractionService.deleteProfile(profileId);
+    }
+
+    @RequestMapping(value = "/findProfile", method = RequestMethod.GET)
+    public ProfileEntity findProfile(String profileId)
     {
-        return meterReadingService.loadConsumption(meterId,month);
+        return profileFractionService.findProfileById(profileId);
     }
 
-    @RequestMapping(value = "/insertMeter", method = RequestMethod.POST)
-    public List<String> insertMeter(@RequestBody MeterEntity meter)
-    {
-        return meterReadingService.insertMeter(meter);
-    }
-
-    @RequestMapping(value = "/deleteMeter", method = RequestMethod.DELETE)
-    public void deleteMeter(String meterId)
-    {
-        meterReadingService.deleteMeter(meterId);
-    }
-
-    @RequestMapping(value = "/findMeter", method = RequestMethod.GET)
-    public MeterEntity findMeter(String meterId)
-    {
-       return meterReadingService.findMeterById(meterId);
-    }
-    @RequestMapping("/test")
-    public void test()  {
-        System.out.println("......oooiilllll..test...");
-
-    }
 
 
 
