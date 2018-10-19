@@ -2,12 +2,9 @@ package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
 import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-/**
- * Created by mmirali on 15/10/2018.
- */
+
 
 public class ProfileFractionId implements Serializable {
 

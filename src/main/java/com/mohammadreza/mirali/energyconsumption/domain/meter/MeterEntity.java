@@ -2,7 +2,6 @@ package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
@@ -61,32 +60,6 @@ public class MeterEntity {
 
     public void setMeterReadingEntityList(List<MeterReadingEntity> meterReadingEntityList) {
         this.meterReadingEntityList = meterReadingEntityList;
-    }
-
-
-    public Boolean meterReadinValuesValidation()
-    {
-        meterReadingEntityList = meterReadingEntityList.stream().sorted((o1, o2) -> o1.getMonth().compareTo(o2.getMonth()) ).collect(Collectors.toList());
-        for (int x=0;x<meterReadingEntityList.size();x++)
-        {
-            if(x>0)
-            {
-                if(meterReadingEntityList.get(x).getReadedMeter() < meterReadingEntityList.get(x-1).getReadedMeter())
-                    return false;
-
-            }
-        }
-        return true;
-
-    }
-
-    public Boolean hasValidFraction()
-    {
-        if(profileEntity.getProfileFractionEntityList()!= null) {
-            if (profileEntity.getProfileFractionEntityList().size() == 12)
-                return true;
-        }
-        return false;
     }
 
 

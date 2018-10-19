@@ -5,9 +5,7 @@ import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationExcepti
 import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationRule;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
-/**
- * Created by mmirali on 14/10/2018.
- */
+
 public class SumFractionValidation implements ValidationRule {
 
     @Override

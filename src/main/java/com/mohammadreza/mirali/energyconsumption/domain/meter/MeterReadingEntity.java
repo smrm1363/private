@@ -15,9 +15,6 @@ import java.util.Optional;
 @Entity
 @IdClass(MeterReadingId.class)
 public class MeterReadingEntity {
-//    @Id
-//    @GeneratedValue
-//    private Long id;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

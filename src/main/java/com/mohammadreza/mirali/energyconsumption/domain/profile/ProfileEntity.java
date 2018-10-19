@@ -6,9 +6,7 @@ import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 import javax.persistence.*;
 import java.util.List;
 
-/**
- * Created by mmirali on 07/10/2018.
- */
+
 @Entity
 public class ProfileEntity {
     @Id

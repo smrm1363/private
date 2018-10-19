@@ -2,7 +2,6 @@ package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 
@@ -11,13 +10,10 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by mmirali on 07/10/2018.
- */
+
 @Entity
 @IdClass(ProfileFractionId.class)
 public class ProfileFractionEntity {
-
 
 
     @Id
@@ -63,23 +59,6 @@ public class ProfileFractionEntity {
         this.fraction = fraction;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        ProfileFractionEntity that = (ProfileFractionEntity) o;
-//
-////        if (!id.equals(that.id)) return false;
-//        if (!profileEntity.equals(that.profileEntity)) return false;
-//        if (month != that.month) return false;
-//        return fraction.equals(that.fraction);
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        return id.hashCode();
-//    }
 
 
     @Override

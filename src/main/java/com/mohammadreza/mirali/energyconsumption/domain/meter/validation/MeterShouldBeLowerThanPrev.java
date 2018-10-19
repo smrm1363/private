@@ -7,12 +7,9 @@ import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingEntity;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Created by mmirali on 14/10/2018.
- */
+
 public class MeterShouldBeLowerThanPrev implements ValidationRule {
 
     @Override
@@ -31,20 +28,6 @@ public class MeterShouldBeLowerThanPrev implements ValidationRule {
             }
         }
 
-        //        Boolean result = false;
-//        if(meterEntity.getMeterReadingEntityList()!= null) {
-//            if (meterEntity.getMeterReadingEntityList().size() == 12)
-//            {
-//                result = true;
-//            }
-//        }
-//        if(!result)
-//            throw new ValidationException("Sum of fractions in profile "+meterEntity.getId()+"should be 1");
-
     }
 
-//    @Override
-//    public void validate(Object o) {
-//
-//    }
 }

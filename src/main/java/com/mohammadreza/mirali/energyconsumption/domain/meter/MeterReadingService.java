@@ -2,7 +2,6 @@ package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
 import com.mohammadreza.mirali.energyconsumption.domain.common.*;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
-import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,12 +64,7 @@ public class MeterReadingService implements ConvertFileToEntityInt {
                 profileEntity = profileEntityOptional.get();
                 profileEntity.getProfileFractionEntityList();
             }
-//            else
-//            {
-//                // TODO: 10/12/2018
-//                System.out.println("Profile is not present");
-//                return;
-//            }
+
             meterEntity.setProfileEntity(profileEntity);
 
             if(meterEntity.getMeterReadingEntityList()==null)
@@ -133,23 +127,5 @@ public class MeterReadingService implements ConvertFileToEntityInt {
         columnMapping.put("Meter reading", "meterReading");
         return columnMapping;
     }
-//
-//    private List<String> doValidations(MeterEntity meterEntity)
-//    {
-//        List<String> messages = new ArrayList<>();
-//        List<ValidationRule> validationRuleList = validationsFactory.getValidationRulesByPropertyName(validationsProperyKey);
-//        validationRuleList.forEach(validationRule ->
-//        {
-//            try {
-//                validationRule.validate(meterEntity);
-//            } catch (MeterException e) {
-//                e.printStackTrace();
-//                messages.add(e.getMessage());
-//            } catch (ValidationException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//        return messages;
-//
-//    }
+
 }

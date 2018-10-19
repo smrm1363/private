@@ -7,12 +7,8 @@ import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionEntity;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
-/**
- * Created by mmirali on 14/10/2018.
- */
+
 public class FractionShoudBeFound implements ValidationRule {
 
     @Override

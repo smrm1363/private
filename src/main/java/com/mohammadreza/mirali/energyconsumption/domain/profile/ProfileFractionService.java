@@ -115,26 +115,6 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
     public void saveProfileList(List<ProfileEntity> profileEntityList) throws ValidationException {
 
         repositoryCompletion.saveEntityListWithValidation(profileEntityList,profileRepository,validationsProperyKey);
-//        List<ProfileEntity> selectedProfileEntityList = new ArrayList<>();
-//        List<String> allExceptionMessages = new ArrayList<>();
-//        profileEntityList.forEach(profileEntity -> {
-//            List<String> exeptionMessages = doValidations(profileEntity,validationsFactory.getValidationRulesByPropertyName(validationsProperyKey));
-//            if(exeptionMessages.size()>0)
-//            {
-//                allExceptionMessages.addAll(exeptionMessages);
-//                return;
-//            }
-//            else
-//            {
-//                selectedProfileEntityList.add(profileEntity);
-//            }
-//
-//        });
-//
-//            profileRepository.saveAll(selectedProfileEntityList);
-//            return allExceptionMessages;
-
-
     }
 
     @Override

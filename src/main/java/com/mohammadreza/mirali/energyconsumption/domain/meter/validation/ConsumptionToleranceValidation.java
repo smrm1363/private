@@ -1,15 +1,10 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter.validation;
 
-import com.mohammadreza.mirali.energyconsumption.domain.common.PropertyRader;
 import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationException;
 import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationRule;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 
-import java.io.IOException;
 
-/**
- * Created by mmirali on 17/10/2018.
- */
 public class ConsumptionToleranceValidation implements ValidationRule {
     @Override
     public void validate(Object o) throws ValidationException {
@@ -35,6 +30,6 @@ public class ConsumptionToleranceValidation implements ValidationRule {
             exceptionMessage.append(", has/have problem");
             throw new ValidationException(exceptionMessage.toString());
         }
-        return;
+
     }
 }
