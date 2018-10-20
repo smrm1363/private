@@ -16,16 +16,14 @@ public class MeterReadingService implements ConvertFileToEntityInt {
     private final MeterRepository meterRepository;
     private final MeterReadingRepository meterReadingRepository;
     private final ProfileRepository profileRepository;
-    private final ValidationsFactory validationsFactory;
     private final RepositoryCompletion repositoryCompletion;
 
 
     @Autowired
-    public MeterReadingService(MeterRepository meterRepository, MeterReadingRepository meterReadingRepository, ProfileRepository profileRepository, ValidationsFactory validationsFactory, RepositoryCompletion repositoryCompletion) {
+    public MeterReadingService(MeterRepository meterRepository, MeterReadingRepository meterReadingRepository, ProfileRepository profileRepository, RepositoryCompletion repositoryCompletion) {
         this.meterRepository = meterRepository;
         this.meterReadingRepository = meterReadingRepository;
         this.profileRepository = profileRepository;
-        this.validationsFactory = validationsFactory;
         this.repositoryCompletion = repositoryCompletion;
     }
 

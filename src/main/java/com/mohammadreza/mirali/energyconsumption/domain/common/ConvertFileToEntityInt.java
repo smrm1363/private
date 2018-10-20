@@ -28,14 +28,14 @@ public interface ConvertFileToEntityInt {
     }
 
 
-    public default <T> void uploadMultiPartFile(MultipartFile multipartFile,T t) throws IOException, ValidationException {
+    public default <T> void uploadMultiPartFile(MultipartFile multipartFile,Class<T> t) throws IOException, ValidationException {
         File file = convertMultiPartToFile(multipartFile);
         uploadFile(file,t);
 
 
         }
 
-    public default <T> void uploadOldFile(String filePath,T t) throws IOException, ValidationException {
+    public default <T> void uploadOldFile(String filePath,Class<T> t) throws IOException, ValidationException {
         File file = new File(filePath);
         try{
             uploadFile(file,t);
@@ -62,7 +62,7 @@ public interface ConvertFileToEntityInt {
 
     }
 
-    public default <T> void uploadFile(File file,T t) throws IOException, ValidationException {
+    public default <T> void uploadFile(File file,Class<T> t) throws IOException, ValidationException {
 
 
         List<T> dtoList = convertFileToDto(new FileReader(file),t);
@@ -70,10 +70,10 @@ public interface ConvertFileToEntityInt {
 
 
     }
-    public default <T> List<T> convertFileToDto(Reader reader,T t) throws IOException {
+    public default <T> List<T> convertFileToDto(Reader reader,Class<T> t) throws IOException {
         List<T> dtoList;
-//        try (Reader reader = new FileReader(file);) {
-            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(reader).withType((Class<? extends T>) t)
+
+            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(reader).withType(t)
                     .withIgnoreLeadingWhiteSpace(true).build();
 
 
@@ -85,30 +85,10 @@ public interface ConvertFileToEntityInt {
             csvToBean.setMappingStrategy(strategy);
             dtoList = csvToBean.parse();
 
-//        }
+
         return dtoList;
 
     }
 
 
-
-    public default <T> List<T> convertFileToDto2(File file,T t) throws IOException {
-        List<T> dtoList;
-        try (Reader reader = new FileReader(file);) {
-            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(reader).withType((Class<? extends T>) t)
-                    .withIgnoreLeadingWhiteSpace(true).build();
-
-
-            HeaderColumnNameTranslateMappingStrategy<T> strategy =
-                    new HeaderColumnNameTranslateMappingStrategy<T>();
-            strategy.setType((Class<? extends T>) t);
-            strategy.setColumnMapping(getColumnMapping());
-
-            csvToBean.setMappingStrategy(strategy);
-            dtoList = csvToBean.parse();
-
-        }
-        return dtoList;
-
-    }
 }

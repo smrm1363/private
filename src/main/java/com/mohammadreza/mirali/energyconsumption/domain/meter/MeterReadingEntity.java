@@ -35,6 +35,16 @@ public class MeterReadingEntity {
     @Transient
     private ProfileFractionEntity matchedProfileFractionEntity;
 
+    public MeterReadingEntity(@NotNull MeterEntity meterEntity, @NotNull MonthEnum month, @NotNull @DecimalMin("0.0") Double readedMeter) {
+        this.meterEntity = meterEntity;
+        this.month = month;
+        this.readedMeter = readedMeter;
+    }
+
+    public MeterReadingEntity() {
+
+    }
+
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     public MeterEntity getMeterEntity() {

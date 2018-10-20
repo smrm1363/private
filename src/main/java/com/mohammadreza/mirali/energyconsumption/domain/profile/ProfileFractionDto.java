@@ -5,6 +5,16 @@ public class ProfileFractionDto {
     String profile;
     Double fraction;
 
+    public ProfileFractionDto(String month, String profile, Double fraction) {
+        this.month = month;
+        this.profile = profile;
+        this.fraction = fraction;
+    }
+
+    public ProfileFractionDto() {
+        
+    }
+
     public String getMonth() {
         return month;
     }
