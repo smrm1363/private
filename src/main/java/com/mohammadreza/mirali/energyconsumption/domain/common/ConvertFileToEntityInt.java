@@ -65,6 +65,35 @@ public interface ConvertFileToEntityInt {
     public default <T> void uploadFile(File file,T t) throws IOException, ValidationException {
 
 
+        List<T> dtoList = convertFileToDto(new FileReader(file),t);
+        convertToEntity(dtoList);
+
+
+    }
+    public default <T> List<T> convertFileToDto(Reader reader,T t) throws IOException {
+        List<T> dtoList;
+//        try (Reader reader = new FileReader(file);) {
+            CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(reader).withType((Class<? extends T>) t)
+                    .withIgnoreLeadingWhiteSpace(true).build();
+
+
+            HeaderColumnNameTranslateMappingStrategy<T> strategy =
+                    new HeaderColumnNameTranslateMappingStrategy<T>();
+            strategy.setType((Class<? extends T>) t);
+            strategy.setColumnMapping(getColumnMapping());
+
+            csvToBean.setMappingStrategy(strategy);
+            dtoList = csvToBean.parse();
+
+//        }
+        return dtoList;
+
+    }
+
+
+
+    public default <T> List<T> convertFileToDto2(File file,T t) throws IOException {
+        List<T> dtoList;
         try (Reader reader = new FileReader(file);) {
             CsvToBean<T> csvToBean = new CsvToBeanBuilder<T>(reader).withType((Class<? extends T>) t)
                     .withIgnoreLeadingWhiteSpace(true).build();
@@ -76,11 +105,10 @@ public interface ConvertFileToEntityInt {
             strategy.setColumnMapping(getColumnMapping());
 
             csvToBean.setMappingStrategy(strategy);
-            List dtoList = csvToBean.parse();
-            convertToEntity(dtoList);
+            dtoList = csvToBean.parse();
+
         }
-
-
+        return dtoList;
 
     }
 }
