@@ -129,7 +129,7 @@ public class MeterReadingServiceTest {
         assertTrue(columnMapping.get("Meter reading").equals("meterReading"));
     }
 
-    MeterEntity getPreperedMeter()
+    public static MeterEntity getPreperedMeter()
     {
         MeterEntity meterEntity = new MeterEntity();
 
@@ -140,13 +140,13 @@ public class MeterReadingServiceTest {
         MeterReadingEntity meterReadingEntity3 = new MeterReadingEntity(meterEntity, MonthEnum.MAR,10.0);
         MeterReadingEntity meterReadingEntity4 = new MeterReadingEntity(meterEntity, MonthEnum.APR,10.0);
         MeterReadingEntity meterReadingEntity5 = new MeterReadingEntity(meterEntity, MonthEnum.AUG,10.0);
-        MeterReadingEntity meterReadingEntity6 = new MeterReadingEntity(meterEntity, MonthEnum.DEC,10.0);
+        MeterReadingEntity meterReadingEntity6 = new MeterReadingEntity(meterEntity, MonthEnum.DEC,30.0);
         MeterReadingEntity meterReadingEntity7 = new MeterReadingEntity(meterEntity, MonthEnum.JUL,10.0);
         MeterReadingEntity meterReadingEntity8 = new MeterReadingEntity(meterEntity, MonthEnum.MAY,10.0);
-        MeterReadingEntity meterReadingEntity9 = new MeterReadingEntity(meterEntity, MonthEnum.NOV,10.0);
+        MeterReadingEntity meterReadingEntity9 = new MeterReadingEntity(meterEntity, MonthEnum.NOV,20.0);
         MeterReadingEntity meterReadingEntity10 = new MeterReadingEntity(meterEntity, MonthEnum.SEP,20.0);
         MeterReadingEntity meterReadingEntity11 = new MeterReadingEntity(meterEntity, MonthEnum.OCT,20.0);
-        MeterReadingEntity meterReadingEntity12 = new MeterReadingEntity(meterEntity, MonthEnum.JUN,20.0);
+        MeterReadingEntity meterReadingEntity12 = new MeterReadingEntity(meterEntity, MonthEnum.JUN,10.0);
         meterReadingEntity1.setConsumtion(10.0);
         meterEntity.setMeterReadingEntityList(new ArrayList<>());
         meterEntity.getMeterReadingEntityList().add(meterReadingEntity1);
@@ -163,7 +163,7 @@ public class MeterReadingServiceTest {
         meterEntity.getMeterReadingEntityList().add(meterReadingEntity12);
         return meterEntity;
     }
-    List getPreperedDto()
+    public static List getPreperedDto()
     {
         List<MeterReadingDto> meterReadingDtoList = new ArrayList<>();
         meterReadingDtoList.add(new MeterReadingDto("001","A","JAN",10.0));
@@ -174,7 +174,7 @@ public class MeterReadingServiceTest {
     }
 
 
-    ProfileEntity getPreperedProfile()
+    public static ProfileEntity getPreperedProfile()
     {
         ProfileEntity profileEntity = new ProfileEntity();
         profileEntity.setId("A");

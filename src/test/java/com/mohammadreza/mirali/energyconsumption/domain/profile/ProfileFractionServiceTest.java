@@ -98,7 +98,7 @@ public class ProfileFractionServiceTest {
         assertTrue(columnMapping.get("Fraction").equals("fraction"));
     }
 
-    ProfileEntity getPreperedProfile()
+    public static ProfileEntity getPreperedProfile()
     {
         ProfileEntity profileEntity = new ProfileEntity();
 
@@ -132,7 +132,7 @@ public class ProfileFractionServiceTest {
         return profileEntity;
     }
 
-    List getPreperedDto()
+    public static List getPreperedDto()
     {
         List<ProfileFractionDto> meterReadingDtoList = new ArrayList<>();
         meterReadingDtoList.add(new ProfileFractionDto("JAN","A",0.1));

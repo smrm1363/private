@@ -9,7 +9,7 @@ public class ConsumptionToleranceValidation implements ValidationRule {
     @Override
     public void validate(Object o) throws ValidationException {
         MeterEntity meterEntity = (MeterEntity) o;
-        Double tolerance = 0.25; //In real situation for more configurability, it could be loaded from a property file or database
+        Double tolerance = 0.25; //In a real situation for more configurability, it could be loaded from a property file or database
         StringBuffer exceptionMessage = new StringBuffer("Consumption for a month should be consistent with " +
                 "the fraction with a valid tolerance, Merer "+meterEntity.getId()+" has invalid values");
         final Boolean[] hasProblem = {false};
