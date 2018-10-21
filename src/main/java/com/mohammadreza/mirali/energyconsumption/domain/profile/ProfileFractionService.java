@@ -106,7 +106,10 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
     }
     public ProfileEntity findProfileById(String profileId)
     {
-        return profileRepository.findById(profileId).get();
+        Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(profileId);
+        if (profileEntityOptional.isPresent())
+        return profileEntityOptional.get();
+        return null;
     }
 
 

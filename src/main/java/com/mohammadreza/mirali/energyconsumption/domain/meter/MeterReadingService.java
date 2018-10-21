@@ -106,7 +106,10 @@ public class MeterReadingService implements ConvertFileToEntityInt {
     }
     public MeterEntity findMeterById(String meterId)
     {
-       return meterRepository.findById(meterId).get();
+        Optional<MeterEntity> meterEntityOptional = meterRepository.findById(meterId);
+        if(meterEntityOptional.isPresent())
+       return meterEntityOptional.get();
+        return null;
     }
     public Double loadConsumption(String meterId,String month)
     {

@@ -36,13 +36,8 @@ public class ConvertFileToEntityIntTest {
         assertTrue(br.readLine().equals("test data"));
     }
 
-    @Test
-    public void uploadMultiPartFile() throws Exception {
-    }
 
-    @Test
-    public void uploadOldFile() throws Exception {
-    }
+
 
     @Test
     public void convertFileToDto() throws Exception {

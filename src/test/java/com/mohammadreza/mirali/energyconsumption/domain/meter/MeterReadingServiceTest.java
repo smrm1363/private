@@ -1,5 +1,6 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
+import com.mohammadreza.mirali.energyconsumption.domain.TestCaseData;
 import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 import com.mohammadreza.mirali.energyconsumption.domain.common.RepositoryCompletion;
 import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationsFactory;
@@ -52,9 +53,9 @@ public class MeterReadingServiceTest {
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
         MeterReadingService spy = spy(meterReadingService);
         List<MeterEntity> meterEntityList = new ArrayList<>();
-        meterEntityList.add(getPreperedMeter());
+        meterEntityList.add(TestCaseData.getPreperedMeter());
         doNothing().when(spy).saveMeterList(meterEntityList);
-        meterReadingService.insertMeter(getPreperedMeter());
+        meterReadingService.insertMeter(TestCaseData.getPreperedMeter());
 
     }
 
@@ -62,7 +63,7 @@ public class MeterReadingServiceTest {
     public void convertToEntity() throws Exception {
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
         MeterReadingService spy = spy(meterReadingService);
-        doNothing().when(spy).convertToEntity(getPreperedDto());
+        doNothing().when(spy).convertToEntity(TestCaseData.getPreperedDtoMeterReading());
 
     }
 
@@ -72,9 +73,9 @@ public class MeterReadingServiceTest {
         meterRepository = mock(MeterRepository.class);
         profileRepository = mock(ProfileRepository.class);
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
-        when(meterRepository.findById(getPreperedMeter().getId())).thenReturn(java.util.Optional.ofNullable(getPreperedMeter()));
-        when(profileRepository.findById(getPreperedMeter().getProfileEntity().getId())).thenReturn(java.util.Optional.ofNullable(getPreperedProfile()));
-        List<MeterEntity> meterEntities = meterReadingService.getEntityListFromDtoList(getPreperedDto());
+        when(meterRepository.findById(TestCaseData.getPreperedMeter().getId())).thenReturn(java.util.Optional.ofNullable(TestCaseData.getPreperedMeter()));
+        when(profileRepository.findById(TestCaseData.getPreperedMeter().getProfileEntity().getId())).thenReturn(java.util.Optional.ofNullable(TestCaseData.getPreperedProfile()));
+        List<MeterEntity> meterEntities = meterReadingService.getEntityListFromDtoList(TestCaseData.getPreperedDtoMeterReading());
         assertTrue(meterEntities.size()==2 );
 
     }
@@ -83,17 +84,17 @@ public class MeterReadingServiceTest {
     public void deleteMeter() throws Exception {
         meterRepository = mock(MeterRepository.class);
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
-        doNothing().when(meterRepository).deleteById(getPreperedMeter().getId());
-        meterReadingService.deleteMeter(getPreperedMeter().getId());
+        doNothing().when(meterRepository).deleteById(TestCaseData.getPreperedMeter().getId());
+        meterReadingService.deleteMeter(TestCaseData.getPreperedMeter().getId());
     }
 
     @Test
     public void findMeterById() throws Exception {
         meterRepository = mock(MeterRepository.class);
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
-        when(meterRepository.findById(getPreperedMeter().getId())).thenReturn(java.util.Optional.ofNullable(getPreperedMeter()));
-        MeterEntity result = meterReadingService.findMeterById(getPreperedMeter().getId());
-        assertTrue(result.equals(getPreperedMeter()));
+        when(meterRepository.findById(TestCaseData.getPreperedMeter().getId())).thenReturn(java.util.Optional.ofNullable(TestCaseData.getPreperedMeter()));
+        MeterEntity result = meterReadingService.findMeterById(TestCaseData.getPreperedMeter().getId());
+        assertTrue(result.equals(TestCaseData.getPreperedMeter()));
     }
 
     @Test
@@ -101,10 +102,10 @@ public class MeterReadingServiceTest {
 
         meterReadingRepository = mock(MeterReadingRepository.class);
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
-        List<MeterReadingEntity> meterReadingEntityList = getPreperedMeter().getMeterReadingEntityList();
-        when(meterReadingRepository.findByMeterEntityIdAndMonth(getPreperedMeter().getId(),getPreperedMeter().getMeterReadingEntityList().get(0).getMonth()))
+        List<MeterReadingEntity> meterReadingEntityList = TestCaseData.getPreperedMeter().getMeterReadingEntityList();
+        when(meterReadingRepository.findByMeterEntityIdAndMonth(TestCaseData.getPreperedMeter().getId(),TestCaseData.getPreperedMeter().getMeterReadingEntityList().get(0).getMonth()))
                 .thenReturn(meterReadingEntityList);
-        Double result = meterReadingService.loadConsumption(getPreperedMeter().getId(),getPreperedMeter().getMeterReadingEntityList().get(0).getMonth().toString());
+        Double result = meterReadingService.loadConsumption(TestCaseData.getPreperedMeter().getId(),TestCaseData.getPreperedMeter().getMeterReadingEntityList().get(0).getMonth().toString());
         assertTrue(result.equals(10.0));
     }
 
@@ -114,7 +115,7 @@ public class MeterReadingServiceTest {
         repositoryCompletion = mock(RepositoryCompletion.class);
         MeterReadingService meterReadingService = new MeterReadingService(meterRepository,meterReadingRepository,profileRepository,repositoryCompletion);
         List<MeterEntity> meterEntityList = new ArrayList<>();
-        meterEntityList.add(getPreperedMeter());
+        meterEntityList.add(TestCaseData.getPreperedMeter());
         doNothing().when(repositoryCompletion).saveEntityListWithValidation(meterEntityList,meterRepository,"meter.reading.validations");
         meterReadingService.saveMeterList(meterEntityList);
 
@@ -127,58 +128,6 @@ public class MeterReadingServiceTest {
         Map<String,String> columnMapping = meterReadingService.getColumnMapping();
         assertTrue(columnMapping.get("MeterID").equals("meterID"));
         assertTrue(columnMapping.get("Meter reading").equals("meterReading"));
-    }
-
-    public static MeterEntity getPreperedMeter()
-    {
-        MeterEntity meterEntity = new MeterEntity();
-
-        meterEntity.setId("001");
-        meterEntity.setProfileEntity(getPreperedProfile());
-        MeterReadingEntity meterReadingEntity1 = new MeterReadingEntity(meterEntity, MonthEnum.JAN,10.0);
-        MeterReadingEntity meterReadingEntity2 = new MeterReadingEntity(meterEntity, MonthEnum.FEB,10.0);
-        MeterReadingEntity meterReadingEntity3 = new MeterReadingEntity(meterEntity, MonthEnum.MAR,10.0);
-        MeterReadingEntity meterReadingEntity4 = new MeterReadingEntity(meterEntity, MonthEnum.APR,10.0);
-        MeterReadingEntity meterReadingEntity5 = new MeterReadingEntity(meterEntity, MonthEnum.AUG,10.0);
-        MeterReadingEntity meterReadingEntity6 = new MeterReadingEntity(meterEntity, MonthEnum.DEC,30.0);
-        MeterReadingEntity meterReadingEntity7 = new MeterReadingEntity(meterEntity, MonthEnum.JUL,10.0);
-        MeterReadingEntity meterReadingEntity8 = new MeterReadingEntity(meterEntity, MonthEnum.MAY,10.0);
-        MeterReadingEntity meterReadingEntity9 = new MeterReadingEntity(meterEntity, MonthEnum.NOV,20.0);
-        MeterReadingEntity meterReadingEntity10 = new MeterReadingEntity(meterEntity, MonthEnum.SEP,20.0);
-        MeterReadingEntity meterReadingEntity11 = new MeterReadingEntity(meterEntity, MonthEnum.OCT,20.0);
-        MeterReadingEntity meterReadingEntity12 = new MeterReadingEntity(meterEntity, MonthEnum.JUN,10.0);
-        meterReadingEntity1.setConsumtion(10.0);
-        meterEntity.setMeterReadingEntityList(new ArrayList<>());
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity1);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity2);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity3);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity4);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity5);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity6);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity7);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity8);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity9);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity10);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity11);
-        meterEntity.getMeterReadingEntityList().add(meterReadingEntity12);
-        return meterEntity;
-    }
-    public static List getPreperedDto()
-    {
-        List<MeterReadingDto> meterReadingDtoList = new ArrayList<>();
-        meterReadingDtoList.add(new MeterReadingDto("001","A","JAN",10.0));
-        meterReadingDtoList.add(new MeterReadingDto("002","A","NOV",10.0));
-        meterReadingDtoList.add(new MeterReadingDto("001","A","FEB",10.0));
-        meterReadingDtoList.add(new MeterReadingDto("001","A","OCT",10.0));
-        return meterReadingDtoList;
-    }
-
-
-    public static ProfileEntity getPreperedProfile()
-    {
-        ProfileEntity profileEntity = new ProfileEntity();
-        profileEntity.setId("A");
-        return profileEntity;
     }
 
 }
