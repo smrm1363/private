@@ -37,66 +37,69 @@ public class MeterReadingService implements ConvertFileToEntityInt {
     @Override
     public void convertToEntity(List dtoList) throws IOException, ValidationException {
 
+        saveMeterList(getEntityListFromDtoList(dtoList));
+    }
+    public List<MeterEntity> getEntityListFromDtoList(List dtoList)
+    {
         List<MeterReadingDto> meterReadingDtoList = dtoList;
-        List<String> allExceptionMessages = new ArrayList<>();
+
         Map<String,MeterEntity> meterEntityMap = new HashMap<>();
         meterReadingDtoList.stream().sorted((o1, o2) -> MonthEnum.valueOf(o1.month).compareTo(MonthEnum.valueOf(o2.month)))
                 .forEach(meterReadingDto ->
-        {
+                {
 
-            MeterEntity meterEntity = meterEntityMap.get(meterReadingDto.getMeterID());
+                    MeterEntity meterEntity = meterEntityMap.get(meterReadingDto.getMeterID());
 
-            if(meterEntity == null) {
-                Optional<MeterEntity> meterEntityOptional = meterRepository.findById(meterReadingDto.getMeterID());
-                if (meterEntityOptional.isPresent()) {
-                    meterEntity = meterEntityOptional.get();
-                } else {
-                    meterEntity = new MeterEntity();
-                    meterEntity.setId(meterReadingDto.getMeterID());
-                }
-            }
-            meterEntity.setValue(meterReadingDto.getMeterReading());
-            ProfileEntity profileEntity = null;
-            Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(meterReadingDto.getProfile());
-            if(profileEntityOptional.isPresent()) {
-                profileEntity = profileEntityOptional.get();
-                profileEntity.getProfileFractionEntityList();
-            }
-
-            meterEntity.setProfileEntity(profileEntity);
-
-            if(meterEntity.getMeterReadingEntityList()==null)
-            {
-                meterEntity.setMeterReadingEntityList(new ArrayList<MeterReadingEntity>());
-            }
-            Boolean updated = false;
-            for(MeterReadingEntity meterReadingEntity:meterEntity.getMeterReadingEntityList())
-            {
-                if(meterReadingEntity.getMeterEntity().getId().equals(meterReadingDto.getMeterID()))
-                    if(meterReadingEntity.getMonth() == MonthEnum.valueOf(meterReadingDto.getMonth()))
-                    {
-                        meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
-                        updated = true;
-                        break;
+                    if(meterEntity == null) {
+                        Optional<MeterEntity> meterEntityOptional = meterRepository.findById(meterReadingDto.getMeterID());
+                        if (meterEntityOptional.isPresent()) {
+                            meterEntity = meterEntityOptional.get();
+                        } else {
+                            meterEntity = new MeterEntity();
+                            meterEntity.setId(meterReadingDto.getMeterID());
+                        }
                     }
-            }
+                    meterEntity.setValue(meterReadingDto.getMeterReading());
+                    ProfileEntity profileEntity = null;
+                    Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(meterReadingDto.getProfile());
+                    if(profileEntityOptional.isPresent()) {
+                        profileEntity = profileEntityOptional.get();
+                        profileEntity.getProfileFractionEntityList();
+                    }
 
-            if(!updated) {
-                MeterReadingEntity meterReadingEntity = new MeterReadingEntity();
-                meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
-                meterReadingEntity.setMonth(MonthEnum.valueOf(meterReadingDto.getMonth()));
-                meterReadingEntity.setMeterEntity(meterEntity);
-                meterEntity.getMeterReadingEntityList().add(meterReadingEntity);
-            }
+                    meterEntity.setProfileEntity(profileEntity);
+
+                    if(meterEntity.getMeterReadingEntityList()==null)
+                    {
+                        meterEntity.setMeterReadingEntityList(new ArrayList<MeterReadingEntity>());
+                    }
+                    Boolean updated = false;
+                    for(MeterReadingEntity meterReadingEntity:meterEntity.getMeterReadingEntityList())
+                    {
+                        if(meterReadingEntity.getMeterEntity().getId().equals(meterReadingDto.getMeterID()))
+                            if(meterReadingEntity.getMonth() == MonthEnum.valueOf(meterReadingDto.getMonth()))
+                            {
+                                meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
+                                updated = true;
+                                break;
+                            }
+                    }
+
+                    if(!updated) {
+                        MeterReadingEntity meterReadingEntity = new MeterReadingEntity();
+                        meterReadingEntity.setReadedMeter(meterReadingDto.getMeterReading());
+                        meterReadingEntity.setMonth(MonthEnum.valueOf(meterReadingDto.getMonth()));
+                        meterReadingEntity.setMeterEntity(meterEntity);
+                        meterEntity.getMeterReadingEntityList().add(meterReadingEntity);
+                    }
 
 
-            meterEntityMap.put(meterEntity.getId(),meterEntity);
+                    meterEntityMap.put(meterEntity.getId(),meterEntity);
 
 
-        });
-        saveMeterList(new ArrayList<>(meterEntityMap.values()));
+                });
+        return new ArrayList<>(meterEntityMap.values());
     }
-
     public void deleteMeter(String meterID)
     {
          meterRepository.deleteById(meterID);

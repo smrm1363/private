@@ -14,16 +14,12 @@ import java.util.*;
 public class ProfileFractionService implements ConvertFileToEntityInt {
     private final String validationsProperyKey = "profile.fraction.validation";
     private final ProfileRepository profileRepository;
-    private final ProfileFractionRepository profileFractionRepository;
-    private final ValidationsFactory validationsFactory;
     private final RepositoryCompletion repositoryCompletion;
     private final MeterRepository meterRepository;
 
     @Autowired
-    public ProfileFractionService(ProfileRepository profileRepository, ProfileFractionRepository profileFractionRepository, ValidationsFactory validationsFactory, RepositoryCompletion repositoryCompletion, MeterRepository meterRepository) {
+    public ProfileFractionService(ProfileRepository profileRepository, RepositoryCompletion repositoryCompletion, MeterRepository meterRepository) {
         this.profileRepository = profileRepository;
-        this.profileFractionRepository = profileFractionRepository;
-        this.validationsFactory = validationsFactory;
         this.repositoryCompletion = repositoryCompletion;
         this.meterRepository = meterRepository;
     }
@@ -37,7 +33,13 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
 
     @Override
     public void convertToEntity(List dtoList) throws IOException, ValidationException {
-        System.out.println("Here ...");
+
+
+     saveProfileList(getEntityListFromDtoList(dtoList));
+    }
+
+    public List<ProfileEntity> getEntityListFromDtoList(List dtoList)
+    {
         List<ProfileFractionDto> profileFractionDtoList = dtoList;
         Map<String,ProfileEntity> profileEntityMap = new HashMap<>();
         profileFractionDtoList.forEach(profileFractionDto ->
@@ -84,10 +86,8 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
             profileEntityMap.put(profileEntity.getId(),profileEntity);
 
         });
-     saveProfileList(new ArrayList<>(profileEntityMap.values()));
+        return new ArrayList<>(profileEntityMap.values());
     }
-
-
 
     public void deleteProfile(String profileID) throws ValidationException {
 

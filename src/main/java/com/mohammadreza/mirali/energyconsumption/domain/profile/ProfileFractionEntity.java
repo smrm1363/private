@@ -34,6 +34,15 @@ public class ProfileFractionEntity {
     private Double fraction;
 
 
+    public ProfileFractionEntity(@NotNull ProfileEntity profileEntity, @NotNull MonthEnum month, @NotNull @DecimalMax("1.0") @DecimalMin("0.0") Double fraction) {
+        this.profileEntity = profileEntity;
+        this.month = month;
+        this.fraction = fraction;
+    }
+
+    public ProfileFractionEntity() {
+
+    }
 
     public ProfileEntity getProfileEntity() {
         return profileEntity;

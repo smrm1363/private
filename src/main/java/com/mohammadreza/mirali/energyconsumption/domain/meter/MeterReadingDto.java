@@ -6,6 +6,17 @@ public class MeterReadingDto {
     String month;
     Double meterReading;
 
+    public MeterReadingDto(String meterID, String profile, String month, Double meterReading) {
+        this.meterID = meterID;
+        this.profile = profile;
+        this.month = month;
+        this.meterReading = meterReading;
+    }
+
+    public MeterReadingDto() {
+
+    }
+
     public String getMeterID() {
         return meterID;
     }
