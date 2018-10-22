@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * This is the main business logic for MeterReading, dou to we need some file related operations, I implement ConvertFileToEntityInt.
+ */
 @Service("MeterReadingService")
 public class MeterReadingService implements ConvertFileToEntityInt {
 
@@ -27,6 +30,11 @@ public class MeterReadingService implements ConvertFileToEntityInt {
         this.repositoryCompletion = repositoryCompletion;
     }
 
+    /**
+     * Insert and update operation for a meter entity and it's MeterReading list
+     * @param meterEntity is a meter entity and it's MeterReading list
+     * @throws ValidationException is the probable exception dou to our business logic
+     */
     public void insertMeter(MeterEntity meterEntity) throws ValidationException {
         List<MeterEntity> meterEntityList = new ArrayList<>();
         meterEntity.getMeterReadingEntityList().forEach(meterReadingEntity -> meterReadingEntity.setMeterEntity(meterEntity));
@@ -34,11 +42,23 @@ public class MeterReadingService implements ConvertFileToEntityInt {
         saveMeterList(meterEntityList);
     }
 
+    /**
+     * It gets entity list from DTO list and call the save operation
+     * @param dtoList is a list of DTO objects
+     * @throws IOException
+     * @throws ValidationException
+     */
     @Override
     public void convertToEntity(List dtoList) throws IOException, ValidationException {
 
         saveMeterList(getEntityListFromDtoList(dtoList));
     }
+
+    /**
+     * It convert a MeterReading DTO to list of MeterEntity and call save operation
+     * @param dtoList
+     * @return
+     */
     public List<MeterEntity> getEntityListFromDtoList(List dtoList)
     {
         List<MeterReadingDto> meterReadingDtoList = dtoList;
@@ -100,10 +120,21 @@ public class MeterReadingService implements ConvertFileToEntityInt {
                 });
         return new ArrayList<>(meterEntityMap.values());
     }
+
+    /**
+     * This method calls delete operation from meterRepository
+     * @param meterID
+     */
     public void deleteMeter(String meterID)
     {
          meterRepository.deleteById(meterID);
     }
+
+    /**
+     * This method find an MeterEntity by ID
+     * @param meterId
+     * @return
+     */
     public MeterEntity findMeterById(String meterId)
     {
         Optional<MeterEntity> meterEntityOptional = meterRepository.findById(meterId);
@@ -111,17 +142,33 @@ public class MeterReadingService implements ConvertFileToEntityInt {
        return meterEntityOptional.get();
         return null;
     }
+
+    /**
+     * This method find Consumption of a Meter in a month
+     * @param meterId
+     * @param month
+     * @return
+     */
     public Double loadConsumption(String meterId,String month)
     {
         return meterReadingRepository.findByMeterEntityIdAndMonth(meterId,MonthEnum.valueOf(month)).get(0).getConsumtion();
 
     }
 
+    /**
+     * This method is for saving a list of a Meter and it's MeterReadings, inside the repositoryCompletion the validations will be checked
+     * @param meterEntityList
+     * @throws ValidationException
+     */
     public void saveMeterList(List<MeterEntity> meterEntityList) throws ValidationException {
 
          repositoryCompletion.saveEntityListWithValidation(meterEntityList, profileRepository, validationsProperyKey);
     }
 
+    /**
+     *
+     * @return mapping the columns from DTO to entity
+     */
     @Override
     public Map<String, String> getColumnMapping() {
         Map<String, String> columnMapping = new HashMap<String, String>();

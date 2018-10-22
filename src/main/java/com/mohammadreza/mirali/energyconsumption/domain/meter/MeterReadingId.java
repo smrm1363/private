@@ -5,7 +5,9 @@ import com.mohammadreza.mirali.energyconsumption.domain.common.MonthEnum;
 import java.io.Serializable;
 
 
-
+/**
+ * This is a composit primary key for MeterReadingEntity
+ */
 public class MeterReadingId implements Serializable {
 
 

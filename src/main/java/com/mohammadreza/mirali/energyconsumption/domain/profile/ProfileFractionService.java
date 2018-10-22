@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
-
+/**
+ * This is the main business logic for ProfileFraction, dou to we need some file related operations, I implement ConvertFileToEntityInt.
+ */
 @Service("ProfileFractionService")
 public class ProfileFractionService implements ConvertFileToEntityInt {
     private final String validationsProperyKey = "profile.fraction.validation";
@@ -24,6 +26,11 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
         this.meterRepository = meterRepository;
     }
 
+    /**
+     * Insert and update operation for a profileEntity and it's ProfileFraction list
+     * @param profileEntity is a meter entity and it's ProfileFraction list
+     * @throws ValidationException is the probable exception dou to our business logic
+     */
     public void insertProfile(ProfileEntity profileEntity) throws ValidationException {
         List<ProfileEntity> profileEntityList = new ArrayList<>();
         profileEntity.getProfileFractionEntityList().forEach(profileFractionEntity -> profileFractionEntity.setProfileEntity(profileEntity));
@@ -31,6 +38,12 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
         saveProfileList(profileEntityList);
     }
 
+    /**
+     * It gets entity list from DTO list and call the save operation
+     * @param dtoList is a list of DTO objects
+     * @throws IOException
+     * @throws ValidationException
+     */
     @Override
     public void convertToEntity(List dtoList) throws IOException, ValidationException {
 
@@ -38,6 +51,11 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
      saveProfileList(getEntityListFromDtoList(dtoList));
     }
 
+    /**
+     * It convert a MeterReading DTO to list of ProfileEntity and call save operation
+     * @param dtoList
+     * @return
+     */
     public List<ProfileEntity> getEntityListFromDtoList(List dtoList)
     {
         List<ProfileFractionDto> profileFractionDtoList = dtoList;
@@ -89,6 +107,12 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
         return new ArrayList<>(profileEntityMap.values());
     }
 
+    /**
+     * This method calls delete operation from ProfileRepository.
+     * If a profile is used in a Meter, it return an ValidationException.
+     * @param profileID
+     * @throws ValidationException
+     */
     public void deleteProfile(String profileID) throws ValidationException {
 
         List<MeterEntity> meterEntityList= meterRepository.findByProfileEntityId(profileID);
@@ -104,6 +128,12 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
         profileRepository.deleteById(profileID);
 
     }
+
+    /**
+     * This method find an ProfileEntity by ID
+     * @param profileId
+     * @return
+     */
     public ProfileEntity findProfileById(String profileId)
     {
         Optional<ProfileEntity> profileEntityOptional = profileRepository.findById(profileId);
@@ -113,13 +143,20 @@ public class ProfileFractionService implements ConvertFileToEntityInt {
     }
 
 
-
-
+    /**
+     * This method is for saving a list of a ProfileEntity and it's ProfileFraction list, inside the repositoryCompletion the validations will be checked
+     * @param profileEntityList
+     * @throws ValidationException
+     */
     public void saveProfileList(List<ProfileEntity> profileEntityList) throws ValidationException {
 
         repositoryCompletion.saveEntityListWithValidation(profileEntityList,profileRepository,validationsProperyKey);
     }
 
+    /**
+     *
+     * @return mapping the columns from DTO to entity
+     */
     @Override
     public Map<String, String> getColumnMapping() {
         Map<String, String> columnMapping = new HashMap<String, String>();

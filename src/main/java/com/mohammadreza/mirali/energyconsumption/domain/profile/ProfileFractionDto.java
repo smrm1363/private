@@ -1,5 +1,8 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
+/**
+ * The equivalent DTO for the inputted ProfileFraction data
+ */
 public class ProfileFractionDto {
     String month;
     String profile;

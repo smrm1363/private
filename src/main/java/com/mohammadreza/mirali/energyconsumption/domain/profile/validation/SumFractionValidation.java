@@ -6,6 +6,10 @@ import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationRule;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
 
+/**
+ * This is the validation For a given Profile the sum of all fractions should be 1.
+ * This is a strategy
+ */
 public class SumFractionValidation implements ValidationRule {
 
     @Override

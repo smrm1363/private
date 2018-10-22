@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+/**
+ * This is the validation for a given meter, a reading for a month should not be lower than the previous one
+ * This is a strategy
+ */
 public class MeterShouldBeLowerThanPrev implements ValidationRule {
 
     @Override

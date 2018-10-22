@@ -1,5 +1,8 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
+/**
+ * The equivalent DTO for the inputted MeterReading data
+ */
 public class MeterReadingDto {
     String meterID;
     String profile;

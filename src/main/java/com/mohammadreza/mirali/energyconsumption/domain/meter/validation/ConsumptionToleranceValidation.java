@@ -4,14 +4,18 @@ import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationExcepti
 import com.mohammadreza.mirali.energyconsumption.domain.common.ValidationRule;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 
-
+/**
+ * This is the validation for Consumption for a month should be consistent with the fraction with a tolerance of a 25%
+ * This is a strategy
+ * In a real situation for more configurability, the 25% could be loaded from a property file or database
+ */
 public class ConsumptionToleranceValidation implements ValidationRule {
     @Override
     public void validate(Object o) throws ValidationException {
         MeterEntity meterEntity = (MeterEntity) o;
         Double tolerance = 0.25; //In a real situation for more configurability, it could be loaded from a property file or database
         StringBuffer exceptionMessage = new StringBuffer("Consumption for a month should be consistent with " +
-                "the fraction with a valid tolerance, Merer "+meterEntity.getId()+" has invalid values");
+                "the fraction with a valid tolerance, Meter "+meterEntity.getId()+" has invalid values");
         final Boolean[] hasProblem = {false};
         meterEntity.getMeterReadingEntityList().forEach(meterReadingEntity -> {
             Double exactValidConsumption = meterEntity.getValue() * meterReadingEntity.getMatchedProfileFractionEntity().getFraction();

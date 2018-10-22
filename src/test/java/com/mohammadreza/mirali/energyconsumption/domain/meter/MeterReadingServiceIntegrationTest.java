@@ -50,16 +50,6 @@ public class MeterReadingServiceIntegrationTest {
         assertNotNull(meterEntity);
     }
 
-    @Test(expected = ValidationException.class)
-    @Transactional
-    public void convertToEntityExpectedException() throws Exception {
-
-        List<MeterReadingDto> meterReadingDto = TestCaseData.getPreperedDtoMeterReading();
-        meterReadingDto.get(0).setProfile("B");
-        meterReadingService.convertToEntity(meterReadingDto);
-       // MeterEntity meterEntity = meterReadingService.findMeterById(TestCaseData.getPreperedMeter().getId());
-
-    }
 
     @Test
     public void saveMeterList() throws Exception {

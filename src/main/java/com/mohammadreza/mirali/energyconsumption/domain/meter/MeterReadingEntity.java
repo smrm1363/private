@@ -71,6 +71,10 @@ public class MeterReadingEntity {
         this.readedMeter = readedMeter;
     }
 
+    /**
+     * This method calculate Consumption for the current MeterReading
+     * @return
+     */
     public Double calculateConsumption()
     {
         if(month.equals(MonthEnum.JAN))

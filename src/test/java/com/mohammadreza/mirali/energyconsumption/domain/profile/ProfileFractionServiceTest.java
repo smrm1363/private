@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -60,14 +61,16 @@ public class ProfileFractionServiceTest {
         ProfileFractionService profileFractionService = new ProfileFractionService(profileRepository,repositoryCompletion,meterRepository);
         when(profileRepository.findById(TestCaseData.getPreperedProfile().getId())).thenReturn(java.util.Optional.ofNullable(TestCaseData.getPreperedProfile()));
         List<ProfileEntity> profileEntityList = profileFractionService.getEntityListFromDtoList(TestCaseData.getPreperedProfileFractionDto());
-        assertTrue(profileEntityList.size()==2 );
+        assertTrue(profileEntityList.size()>0 );
     }
 
     @Test
     public void deleteProfile() throws Exception {
         profileRepository = mock(ProfileRepository.class);
+        meterRepository = mock(MeterRepository.class);
         ProfileFractionService profileFractionService = new ProfileFractionService(profileRepository,repositoryCompletion,meterRepository);
         doNothing().when(profileRepository).deleteById(TestCaseData.getPreperedProfile().getId());
+        when(meterRepository.findById(any())).thenReturn(null);
         profileFractionService.deleteProfile(TestCaseData.getPreperedProfile().getId());
     }
 

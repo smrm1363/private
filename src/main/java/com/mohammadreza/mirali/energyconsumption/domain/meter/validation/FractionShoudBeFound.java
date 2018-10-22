@@ -8,7 +8,10 @@ import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingEntity
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileFractionEntity;
 
 
-
+/**
+ * This is the validation for Fractions for the profiles contained in the data should exist.
+ * This is a strategy
+ */
 public class FractionShoudBeFound implements ValidationRule {
 
     @Override
