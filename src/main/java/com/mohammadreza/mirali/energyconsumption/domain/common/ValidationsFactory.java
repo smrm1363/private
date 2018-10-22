@@ -30,6 +30,7 @@ public class ValidationsFactory {
     /**
      * It returns a list of the ValidationRule dynamically with reading the application.properties file.
      * If in the future we wand to add another validation, we just need to add the class name of the validation in to the application.properties file.
+     * It return a validation chain
      * @param propertyKey is the KEY of the property file.
      * @return  a list of the ValidationRule
      */
