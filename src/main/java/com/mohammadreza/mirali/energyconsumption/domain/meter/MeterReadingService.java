@@ -38,6 +38,8 @@ public class MeterReadingService implements ConvertFileToEntityInt {
     public void insertMeter(MeterEntity meterEntity) throws ValidationException {
         List<MeterEntity> meterEntityList = new ArrayList<>();
         meterEntity.getMeterReadingEntityList().forEach(meterReadingEntity -> meterReadingEntity.setMeterEntity(meterEntity));
+        if(meterEntity.getProfileEntity().getProfileFractionEntityList()==null)
+            meterEntity.setProfileEntity(profileRepository.findById(meterEntity.getProfileEntity().getId()).get());
         meterEntityList.add(meterEntity);
         saveMeterList(meterEntityList);
     }

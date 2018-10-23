@@ -1,5 +1,6 @@
 package com.mohammadreza.mirali.energyconsumption.domain.profile;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 

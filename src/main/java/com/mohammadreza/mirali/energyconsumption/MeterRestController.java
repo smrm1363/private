@@ -5,6 +5,7 @@ import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterEntity;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingDto;
 import com.mohammadreza.mirali.energyconsumption.domain.meter.MeterReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,7 +65,7 @@ public class MeterRestController {
      * @param meter is the inputted JSON object
      * @throws ValidationException s the probable exception dou to our business logic
      */
-    @RequestMapping(value = "/insertMeter", method = RequestMethod.POST)
+    @RequestMapping(value = "/insertMeter", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void insertMeter(@RequestBody MeterEntity meter) throws ValidationException {
          meterReadingService.insertMeter(meter);
     }

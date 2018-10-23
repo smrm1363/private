@@ -1,8 +1,6 @@
 package com.mohammadreza.mirali.energyconsumption.domain.meter;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.mohammadreza.mirali.energyconsumption.domain.profile.ProfileEntity;
 
 import javax.persistence.*;
@@ -53,6 +51,11 @@ public class MeterEntity {
         this.profileEntity = profileEntity;
     }
 
+    @JsonProperty("profileEntity")
+    public void setProfileEntity(String id) {
+         profileEntity = new ProfileEntity();
+         profileEntity.setId(id);
+    }
 
     public List<MeterReadingEntity> getMeterReadingEntityList() {
         return meterReadingEntityList;
